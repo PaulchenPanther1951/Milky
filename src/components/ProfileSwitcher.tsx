@@ -7,6 +7,7 @@ import { applyTheme } from "../lib/themes";
 import { MILESTONES, computeAchieved } from "../lib/milestones";
 import { listEntriesByProfile } from "../lib/db";
 import type { ToothEntry } from "../types";
+import { ExportImport } from "./ExportImport";
 
 interface Props {
   onClose: () => void;
@@ -156,6 +157,9 @@ export function ProfileSwitcher({ onClose }: Props) {
               Das Theme (Galaxie, Korallenriff, Drachenwald, Wolkenreich) waehlst du im
               jeweiligen Profil — tippe in der Liste auf das Stift-Symbol neben einem Kind.
             </p>
+
+            <div className="settings-section-title">Backup &amp; Wiederherstellen</div>
+            <ExportImport />
           </>
         )}
 

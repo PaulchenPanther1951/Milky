@@ -23,6 +23,21 @@ npm run build
 npm run preview
 ```
 
+## Icons regenerieren
+
+App-Icons (192/512/180/maskable) werden aus einer Master-SVG via `sharp` erzeugt:
+
+```bash
+npm run build:icons
+```
+
+## Hosting (GitHub Pages)
+
+Es liegt ein Workflow unter `.github/workflows/deploy.yml`. Aktivierung:
+1. Repo auf public schalten (Pages auf privatem Repo braucht GitHub Pro).
+2. Repo-Settings → Pages → Source = "GitHub Actions".
+3. Push auf `main` triggert das Deployment automatisch.
+
 ## Projekt-Uebersicht
 
 `docs/01-uebersicht.html` — komplette Roadmap, Vision, Entscheidungen, Meilensteine.

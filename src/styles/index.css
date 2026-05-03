@@ -1226,6 +1226,44 @@ img { max-width: 100%; display: block; }
   line-height: 1.45;
 }
 
+/* ===== Export / Import (Schritt 8) ===== */
+.settings-section-title {
+  margin-top: 22px;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+.export-import {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ei-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.ei-row .btn { width: 100%; }
+.ei-hint {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  font-style: italic;
+  line-height: 1.55;
+}
+.ei-message {
+  font-size: 0.85rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
 /* Smaller phones */
 @media (max-width: 380px) {
   .star-sky { width: 96vw; }
@@ -1235,4 +1273,5 @@ img { max-width: 100%; display: block; }
   .profile-meta .kid-name { font-size: 1rem; }
   .photo-row { gap: 8px; }
   .milestone-title { font-size: 1.6rem !important; }
+  .ei-row { grid-template-columns: 1fr; }
 }
