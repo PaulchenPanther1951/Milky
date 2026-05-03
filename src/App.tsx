@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
+import { StarSky } from "./components/StarSky";
+import { StarDetailPlaceholder } from "./components/StarDetailPlaceholder";
 
 export default function App() {
   const [ready, setReady] = useState(false);
+  const [selectedToothId, setSelectedToothId] = useState<string | null>(null);
+
+  // Schritt 2: keine Speicherung — leere Set, nichts leuchtet noch.
+  // Ab Schritt 4 wird hier die echte Liste aus IndexedDB stehen.
+  const litToothIds = new Set<string>();
 
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 50);
@@ -17,14 +24,25 @@ export default function App() {
         <div className="stars-static" />
       </div>
 
-      <main className="welcome">
-        <p className="kicker">Milky</p>
-        <h1>Eine kleine Galaxie fuer jeden ausgefallenen Milchzahn.</h1>
-        <p className="lede">
-          Schritt 1 ist bereit — das Geruest steht. Sterne, Profile und Diary kommen ab Schritt 2.
+      <header className="app-header">
+        <p className="kid-greeting">
+          <span className="kid-name">Milky</span>
         </p>
-        <p className="studio">by Fianuk Studio</p>
+        <p className="hint">Tippe einen Stern an</p>
+      </header>
+
+      <main className="constellation-stage">
+        <StarSky litToothIds={litToothIds} onSelect={setSelectedToothId} />
       </main>
+
+      <footer className="app-footer">
+        <p className="footer-step">Schritt 2 — Sternenkarte</p>
+      </footer>
+
+      <StarDetailPlaceholder
+        toothId={selectedToothId}
+        onClose={() => setSelectedToothId(null)}
+      />
     </div>
   );
 }
