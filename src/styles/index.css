@@ -782,6 +782,134 @@ img { max-width: 100%; display: block; }
 }
 .profile-row-edit:hover { background: rgba(216, 196, 255, 0.10); color: var(--text); }
 
+/* ===== Constellation lines (SVG layer in star-sky) ===== */
+.constellation {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.constellation-line {
+  stroke: var(--accent);
+  stroke-width: 0.18;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 1.4px var(--accent-soft));
+  vector-effect: non-scaling-stroke;
+  animation: lineDraw 1100ms ease-out forwards;
+}
+@keyframes lineDraw {
+  from { opacity: 0; stroke-dasharray: 0 200; }
+  to   { opacity: 0.55; stroke-dasharray: 200 0; }
+}
+
+/* ===== Star Detail (Schritt 4) ===== */
+.detail-card {
+  max-width: 520px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.entry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+  margin-top: 6px;
+}
+.entry-form textarea {
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  width: 100%;
+  resize: vertical;
+  min-height: 96px;
+  transition: border-color 150ms, background 150ms;
+}
+.entry-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.32);
+}
+
+/* ===== Photo Slot (in StarDetail) ===== */
+.photo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.photo-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.photo-slot-area {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px dashed var(--line-strong);
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  transition: border-color 200ms, background 200ms;
+  position: relative;
+}
+.photo-slot-area:hover { border-color: var(--accent); }
+.photo-slot-area.has-image { border-style: solid; border-color: var(--accent-soft); }
+.photo-slot-area img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.photo-slot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+}
+.photo-slot-empty-text {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.photo-slot-hint {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  font-style: italic;
+}
+.photo-slot-remove {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(12, 10, 31, 0.7);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 150ms;
+}
+.photo-slot-remove:hover { background: rgba(12, 10, 31, 0.9); }
+.photo-slot-label {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
 /* Smaller phones */
 @media (max-width: 380px) {
   .star-sky { width: 96vw; }
@@ -789,4 +917,5 @@ img { max-width: 100%; display: block; }
   .theme-grid { gap: 10px; }
   .profile-button { gap: 10px; padding: 8px 14px 8px 8px; }
   .profile-meta .kid-name { font-size: 1rem; }
+  .photo-row { gap: 8px; }
 }
