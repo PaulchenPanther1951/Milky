@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import type { Profile, ToothEntry } from "../types";
 import { findTooth } from "../lib/teeth";
 import { entryIdFor } from "../lib/use-entries";
-import { savePhoto, deletePhoto, putEntry, deleteEntry } from "../lib/db";
+import { savePhoto, deletePhoto, saveAudio, deleteAudio, putEntry, deleteEntry } from "../lib/db";
 import { PhotoSlot, type PhotoSlotState } from "./PhotoSlot";
+import { AudioMemo, type AudioSlotState } from "./AudioMemo";
 
 interface Props {
   toothId: string | null;
@@ -15,30 +16,36 @@ interface Props {
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
-function emptySlot(existingKey?: string): PhotoSlotState {
+function emptyPhotoSlot(existingKey?: string): PhotoSlotState {
+  return { existingKey, pendingBlob: null, removed: false };
+}
+
+function emptyAudioSlot(existingKey?: string): AudioSlotState {
   return { existingKey, pendingBlob: null, removed: false };
 }
 
 export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }: Props) {
   const [date, setDate] = useState<string>(existingEntry?.date ?? todayIso());
   const [note, setNote] = useState<string>(existingEntry?.note ?? "");
-  const [beforeSlot, setBeforeSlot] = useState<PhotoSlotState>(() =>
-    emptySlot(existingEntry?.photoBeforeKey)
-  );
-  const [afterSlot, setAfterSlot] = useState<PhotoSlotState>(() =>
-    emptySlot(existingEntry?.photoAfterKey)
-  );
+  const [toothFairyGift, setToothFairyGift] = useState<string>(existingEntry?.toothFairyGift ?? "");
+  const [showFairyField, setShowFairyField] = useState<boolean>(Boolean(existingEntry?.toothFairyGift));
+  const [beforeSlot, setBeforeSlot] = useState<PhotoSlotState>(() => emptyPhotoSlot(existingEntry?.photoBeforeKey));
+  const [afterSlot, setAfterSlot] = useState<PhotoSlotState>(() => emptyPhotoSlot(existingEntry?.photoAfterKey));
+  const [audioSlot, setAudioSlot] = useState<AudioSlotState>(() => emptyAudioSlot(existingEntry?.audioMemoKey));
   const [submitting, setSubmitting] = useState(false);
 
   const tooth = useMemo(() => (toothId ? findTooth(toothId) : undefined), [toothId]);
 
-  // Reset form when toothId changes
+  // Reset form when toothId or existing entry changes
   useEffect(() => {
     if (!toothId) return;
     setDate(existingEntry?.date ?? todayIso());
     setNote(existingEntry?.note ?? "");
-    setBeforeSlot(emptySlot(existingEntry?.photoBeforeKey));
-    setAfterSlot(emptySlot(existingEntry?.photoAfterKey));
+    setToothFairyGift(existingEntry?.toothFairyGift ?? "");
+    setShowFairyField(Boolean(existingEntry?.toothFairyGift));
+    setBeforeSlot(emptyPhotoSlot(existingEntry?.photoBeforeKey));
+    setAfterSlot(emptyPhotoSlot(existingEntry?.photoAfterKey));
+    setAudioSlot(emptyAudioSlot(existingEntry?.audioMemoKey));
   }, [toothId, existingEntry]);
 
   // Lock body scroll while open
@@ -73,12 +80,29 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
     return slot.existingKey;
   }
 
+  async function resolveAudioKey(slot: AudioSlotState): Promise<string | undefined> {
+    if (slot.pendingBlob) {
+      if (slot.existingKey) {
+        try { await deleteAudio(slot.existingKey); } catch { /* ignore */ }
+      }
+      return saveAudio(slot.pendingBlob);
+    }
+    if (slot.removed) {
+      if (slot.existingKey) {
+        try { await deleteAudio(slot.existingKey); } catch { /* ignore */ }
+      }
+      return undefined;
+    }
+    return slot.existingKey;
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     try {
       const photoBeforeKey = await resolvePhotoKey(beforeSlot);
       const photoAfterKey = await resolvePhotoKey(afterSlot);
+      const audioMemoKey = await resolveAudioKey(audioSlot);
       const now = new Date().toISOString();
       const entry: ToothEntry = {
         id: existingEntry?.id ?? entryIdFor(profile.id, tooth!.id),
@@ -88,8 +112,8 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
         note: note.trim(),
         photoBeforeKey,
         photoAfterKey,
-        toothFairyGift: existingEntry?.toothFairyGift,
-        audioMemoKey: existingEntry?.audioMemoKey,
+        toothFairyGift: toothFairyGift.trim() ? toothFairyGift.trim() : undefined,
+        audioMemoKey,
         createdAt: existingEntry?.createdAt ?? now,
         updatedAt: now,
       };
@@ -103,7 +127,7 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
 
   async function handleDelete() {
     if (!existingEntry) return;
-    if (!confirm("Diesen Stern wieder erlöschen lassen? Foto und Notiz gehen mit.")) return;
+    if (!confirm("Diesen Stern wieder erlöschen lassen? Foto, Notiz und Audio gehen mit.")) return;
     setSubmitting(true);
     try {
       await deleteEntry(existingEntry.id);
@@ -166,6 +190,41 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
               maxLength={1000}
             />
           </div>
+
+          <div className="field">
+            <span className="field-label">Audio (optional)</span>
+            <AudioMemo state={audioSlot} onChange={setAudioSlot} />
+            <p className="field-hint">Ein paar Sekunden Stimme, Lachen, oder die Geschichte des Wackelzahns.</p>
+          </div>
+
+          {showFairyField ? (
+            <div className="field">
+              <label htmlFor="entry-fairy">Was hat die Zahnfee oder Maus gebracht?</label>
+              <input
+                id="entry-fairy"
+                type="text"
+                value={toothFairyGift}
+                onChange={(e) => setToothFairyGift(e.target.value)}
+                placeholder="z.B. einen Goldtaler"
+                maxLength={120}
+              />
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => { setShowFairyField(false); setToothFairyGift(""); }}
+              >
+                Feld weglassen
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="link-button add-fairy"
+              onClick={() => setShowFairyField(true)}
+            >
+              + Zahnfee / Zahnmaus dazu
+            </button>
+          )}
 
           <div className="form-actions">
             <button type="button" className="btn btn-ghost" onClick={onClose}>
