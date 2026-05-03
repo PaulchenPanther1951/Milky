@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milky — Projekt-Übersicht v0.0.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0c0a1f;
+  --night-soft:#1a1538;
+  --card:#221c46;
+  --card-soft:#2a2358;
+  --milky:#d8c4ff;
+  --warm:#ffd6a8;
+  --rose:#ffb4dc;
+  --teal:#7ad2c8;
+  --text:#f3eef9;
+  --text-dim:#b8aed4;
+  --text-faint:#7a7299;
+  --success:#9ed8a6;
+  --warning:#f0c084;
+  --danger:#e89090;
+  --line:rgba(216,196,255,0.10);
+  --line-strong:rgba(216,196,255,0.24);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--night);
+  color:var(--text);
+  font-family:'Quicksand',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.55;
+}
+
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(circle at 18% 22%, transparent 16%, rgba(216,196,255,0.10) 16.3%, rgba(216,196,255,0.10) 16.6%, transparent 16.9%),
+    radial-gradient(circle at 18% 22%, transparent 26%, rgba(216,196,255,0.05) 26.3%, rgba(216,196,255,0.05) 26.6%, transparent 26.9%),
+    radial-gradient(circle at 82% 70%, transparent 18%, rgba(255,180,220,0.08) 18.3%, rgba(255,180,220,0.08) 18.6%, transparent 18.9%),
+    radial-gradient(circle at 82% 70%, transparent 30%, rgba(255,180,220,0.04) 30.3%, rgba(255,180,220,0.04) 30.6%, transparent 30.9%),
+    radial-gradient(circle at 50% 110%, transparent 30%, rgba(120,170,255,0.06) 30.4%, rgba(120,170,255,0.06) 30.7%, transparent 31%);
+  pointer-events:none;
+  z-index:0;
+  animation:driftbg 22s ease-in-out infinite alternate;
+}
+@keyframes driftbg{
+  0%{transform:scale(1) translate(0,0);opacity:0.85}
+  100%{transform:scale(1.05) translate(20px,-15px);opacity:1}
+}
+
+/* Sternenhimmel-Layer */
+body::after{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%, rgba(255,245,225,0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 22% 38%, rgba(255,245,225,0.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 41% 18%, rgba(255,245,225,0.65) 50%, transparent 51%),
+    radial-gradient(1px 1px at 64% 8%, rgba(255,245,225,0.55) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 78% 32%, rgba(255,245,225,0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 92% 14%, rgba(255,245,225,0.4) 50%, transparent 51%),
+    radial-gradient(1px 1px at 12% 78%, rgba(255,245,225,0.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 35% 92%, rgba(255,245,225,0.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 56% 84%, rgba(255,245,225,0.5) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 86% 78%, rgba(255,245,225,0.7) 50%, transparent 51%);
+  opacity:0.8;
+  animation:twinkle 6s ease-in-out infinite alternate;
+}
+@keyframes twinkle{
+  0%{opacity:0.55}
+  100%{opacity:0.95}
+}
+
+.c{max-width:1200px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+
+.studio{text-align:center;padding:1.5rem 0 0.5rem}
+.studio img{
+  height:110px;display:block;margin:0 auto;
+  filter:drop-shadow(0 0 24px rgba(216,196,255,0.20));
+  opacity:0.95;
+}
+.studio-foot{text-align:center;padding:30px 0 14px;opacity:0.75}
+.studio-foot img{
+  height:64px;display:block;margin:0 auto;
+  opacity:0.8;
+}
+.studio-foot .signature{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.7rem;font-weight:400;
+  color:rgba(216,196,255,0.4);
+  letter-spacing:0.4em;text-transform:uppercase;
+  display:block;margin-top:0.5rem;font-style:italic;
+}
+
+.brand-hero{text-align:center;padding:3rem 0 2rem;margin-bottom:30px;position:relative}
+.brand-hero h1{
+  font-family:'Fraunces',serif;
+  font-size:4.2rem;font-weight:300;
+  color:#faf6ff;
+  letter-spacing:0.10em;
+  text-shadow:0 0 60px rgba(216,196,255,0.30);
+  line-height:1.05;
+}
+.brand-hero .sub{
+  font-family:'Fraunces',serif;
+  font-size:1.4rem;font-style:italic;font-weight:400;
+  color:var(--milky);
+  margin-top:0.4rem;
+  letter-spacing:0.04em;
+}
+.brand-hero .tag{
+  font-size:0.75rem;color:var(--text-dim);
+  opacity:0.65;letter-spacing:0.14em;text-transform:uppercase;
+  margin-top:1rem;
+}
+.vbadge{
+  display:inline-block;margin-top:14px;padding:5px 16px;
+  background:rgba(216,196,255,0.10);
+  border:1px solid rgba(216,196,255,0.30);
+  border-radius:20px;font-size:0.78rem;
+  color:var(--milky);font-weight:600;
+  letter-spacing:0.05em;
+}
+
+.sec{margin-bottom:48px}
+.st{
+  font-family:'Fraunces',serif;
+  font-size:1.7rem;font-weight:500;
+  color:var(--milky);
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+  letter-spacing:0.02em;
+}
+.st-sub{
+  font-size:0.9rem;color:var(--text-dim);
+  font-family:'Quicksand',sans-serif;
+  font-weight:400;font-style:normal;
+  margin-left:1rem;letter-spacing:0;
+}
+
+.vision{
+  background:linear-gradient(135deg, rgba(216,196,255,0.08) 0%, rgba(255,180,220,0.04) 100%);
+  border:1px solid var(--line-strong);
+  border-radius:18px;
+  padding:32px 36px;
+  font-family:'Fraunces',serif;
+  font-size:1.25rem;font-weight:400;
+  line-height:1.7;
+  color:#ece5f5;
+}
+.vision .lead{font-style:italic;color:var(--milky);margin-bottom:1rem;font-size:1.35rem}
+.vision .nope{color:var(--text-dim);font-size:1rem;margin-top:1.2rem;font-family:'Quicksand',sans-serif;font-style:normal}
+.vision .nope strong{color:var(--rose);font-weight:600}
+
+.hero{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:30px}
+.hc{
+  background:var(--card);border-radius:16px;padding:22px 14px;
+  text-align:center;border:1px solid var(--line);
+  transition:transform 0.25s, border-color 0.25s;
+}
+.hc:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+.hc .n{
+  font-family:'Fraunces',serif;
+  font-size:2.4rem;font-weight:500;line-height:1;margin-bottom:6px;
+}
+.hc .l{font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em}
+.hc .d{font-size:0.7rem;color:var(--text-faint);margin-top:6px}
+
+.dg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.dc{
+  background:var(--card);border-radius:16px;padding:22px 24px;
+  border:1px solid var(--line);
+  position:relative;
+  transition:border-color 0.2s;
+}
+.dc:hover{border-color:var(--line-strong)}
+.dc .qid{
+  position:absolute;top:18px;right:22px;
+  font-size:0.68rem;color:var(--text-faint);
+  letter-spacing:0.12em;text-transform:uppercase;
+  font-weight:600;
+}
+.dc h3{
+  font-family:'Fraunces',serif;
+  font-size:1.25rem;font-weight:500;
+  color:var(--milky);
+  margin-bottom:8px;line-height:1.25;
+}
+.dc .answer{
+  font-size:0.95rem;color:var(--text);
+  margin-bottom:8px;font-weight:500;
+}
+.dc .reason{
+  font-size:0.82rem;color:var(--text-dim);
+  font-style:italic;line-height:1.5;
+}
+
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+.pc{
+  background:linear-gradient(180deg, rgba(216,196,255,0.10) 0%, var(--card) 70%);
+  border-radius:18px;padding:24px 22px;
+  border:1px solid rgba(216,196,255,0.18);
+  position:relative;
+}
+.pc .pn{
+  font-size:0.7rem;color:var(--milky);
+  letter-spacing:0.18em;text-transform:uppercase;
+  font-weight:700;margin-bottom:6px;
+}
+.pc h3{
+  font-family:'Fraunces',serif;
+  font-size:1.5rem;font-weight:500;
+  color:#faf6ff;margin-bottom:10px;
+}
+.pc .desc{font-size:0.88rem;color:var(--text);line-height:1.55;margin-bottom:10px}
+.pc .src{
+  font-size:0.72rem;color:var(--text-dim);
+  border-top:1px solid var(--line);padding-top:8px;
+  font-style:italic;
+}
+
+.scope{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.sb{
+  background:var(--card);border-radius:16px;padding:22px 24px;
+  border:1px solid var(--line);
+}
+.sb h3{
+  font-family:'Fraunces',serif;
+  font-size:1.3rem;font-weight:500;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sb.in h3{color:var(--success)}
+.sb.out h3{color:var(--rose)}
+.sb h3 .marker{
+  display:inline-block;width:10px;height:10px;border-radius:50%;
+}
+.sb.in h3 .marker{background:var(--success);box-shadow:0 0 12px rgba(158,216,166,0.5)}
+.sb.out h3 .marker{background:var(--rose);opacity:0.6}
+.sb ul{list-style:none}
+.sb li{
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  font-size:0.92rem;color:var(--text);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.sb li:last-child{border-bottom:none}
+.sb li::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-top:8px;flex-shrink:0;
+}
+.sb.in li::before{background:var(--success)}
+.sb.out li::before{background:var(--rose);opacity:0.5}
+.sb li .why{display:block;font-size:0.78rem;color:var(--text-dim);font-style:italic;margin-top:2px}
+
+.tl{position:relative;padding-left:24px}
+.tl::before{
+  content:'';position:absolute;left:8px;top:8px;bottom:8px;
+  width:2px;background:linear-gradient(180deg, var(--milky) 0%, var(--rose) 50%, var(--teal) 100%);
+  opacity:0.4;
+}
+.ti{
+  position:relative;background:var(--card);border-radius:14px;
+  padding:16px 22px;margin-bottom:14px;
+  border:1px solid var(--line);
+  transition:border-color 0.2s, transform 0.2s;
+}
+.ti:hover{border-color:var(--line-strong)}
+.ti::before{
+  content:'';position:absolute;left:-22px;top:22px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--card);border:2px solid var(--milky);
+  box-shadow:0 0 0 3px var(--night);
+}
+.ti.next::before{background:var(--milky);box-shadow:0 0 12px var(--milky), 0 0 0 3px var(--night)}
+.ti .mn{
+  font-family:'Fraunces',serif;
+  font-size:1.15rem;font-weight:500;color:var(--milky);
+  margin-bottom:4px;
+}
+.ti .md{font-size:0.88rem;color:var(--text);line-height:1.5}
+.ti .ml{
+  display:inline-block;font-size:0.66rem;
+  padding:2px 10px;border-radius:10px;margin-left:8px;
+  background:rgba(216,196,255,0.15);color:var(--milky);
+  letter-spacing:0.08em;text-transform:uppercase;font-weight:600;
+}
+.ti.next .ml{background:rgba(240,192,132,0.2);color:var(--warning)}
+.ti.done::before{background:var(--success);box-shadow:0 0 10px rgba(158,216,166,0.45),0 0 0 3px var(--night)}
+.ti.done .ml{background:rgba(158,216,166,0.2);color:var(--success)}
+
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rc{
+  background:var(--card);border-radius:14px;padding:18px 22px;
+  border:1px solid var(--line);
+  border-left:3px solid var(--rose);
+}
+.rc.med{border-left-color:var(--warning)}
+.rc.low{border-left-color:var(--teal)}
+.rc h3{
+  font-family:'Fraunces',serif;
+  font-size:1.1rem;font-weight:500;color:var(--text);
+  margin-bottom:6px;
+}
+.rc .sev{
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;
+  color:var(--rose);font-weight:700;margin-bottom:8px;display:block;
+}
+.rc.med .sev{color:var(--warning)}
+.rc.low .sev{color:var(--teal)}
+.rc .desc{font-size:0.85rem;color:var(--text-dim);line-height:1.5;margin-bottom:10px}
+.rc .mit{font-size:0.85rem;color:var(--text);line-height:1.5}
+.rc .mit strong{color:var(--milky);font-weight:600}
+
+.oq{
+  background:linear-gradient(135deg, rgba(240,192,132,0.08) 0%, var(--card) 80%);
+  border:1px solid rgba(240,192,132,0.25);
+  border-radius:16px;padding:22px 26px;
+}
+.oq h3{
+  font-family:'Fraunces',serif;
+  color:var(--warning);font-size:1.2rem;
+  margin-bottom:10px;
+}
+.oq ul{list-style:none;padding-left:0}
+.oq li{
+  padding:6px 0;font-size:0.92rem;color:var(--text);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.oq li::before{
+  content:'?';color:var(--warning);font-weight:700;
+  font-size:1.1rem;margin-top:-2px;
+}
+
+.nav{
+  display:grid;grid-template-columns:1fr;gap:14px;
+  margin-top:30px;
+}
+.nl{
+  background:var(--card-soft);border-radius:14px;padding:20px 24px;
+  border:1px solid var(--line);
+  text-decoration:none;color:inherit;
+  display:block;transition:all 0.25s;
+  position:relative;
+}
+.nl:hover{
+  border-color:var(--milky);
+  background:var(--card);
+  transform:translateY(-2px);
+}
+.nl .nlt{
+  font-family:'Fraunces',serif;
+  font-size:1.1rem;font-weight:500;color:var(--milky);
+  margin-bottom:4px;
+}
+.nl .nld{font-size:0.82rem;color:var(--text-dim)}
+
+.footer{
+  text-align:center;margin-top:60px;padding-top:30px;
+  border-top:1px solid var(--line);
+  color:var(--text-faint);font-size:0.78rem;
+  letter-spacing:0.05em;
+}
+.footer .echo{font-family:'Fraunces',serif;font-style:italic;color:var(--text-dim);font-size:0.95rem;margin-bottom:6px}
+
+@media (max-width:840px){
+  .hero{grid-template-columns:repeat(2,1fr)}
+  .dg,.scope,.rg,.nav,.pg{grid-template-columns:1fr}
+  .brand-hero h1{font-size:2.8rem}
+  .vision{padding:24px 22px;font-size:1.1rem}
+  .c{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="c">
+
+  <!-- Studio-Header -->
+  <div class="studio">
+    <img src="assets/fianuk_logo.png" alt="Fianuk Studio">
+  </div>
+
+  <!-- Brand-Hero -->
+  <div class="brand-hero">
+    <h1>MILKY</h1>
+    <div class="sub">Eine kleine Galaxie für jeden ausgefallenen Milchzahn</div>
+    <div class="tag">Projekt-Übersicht &middot; Schritt 1 abgeschlossen — Schritt 2 als nächstes</div>
+    <div class="vbadge">v0.0.1 &middot; 1 von 8 Schritten</div>
+  </div>
+
+  <!-- VISION -->
+  <div class="sec">
+    <div class="st">Vision <span class="st-sub">— was Milky ist und was nicht</span></div>
+    <div class="vision">
+      <div class="lead">
+        Ein Tagebuch das mit jedem Milchzahn ein Stern mehr ist.
+      </div>
+      <p>
+        Milky lebt auf dem Handy von Eltern und Kindern. Jeder ausgefallene Zahn wird zu einem Stern in einer wachsenden Konstellation — mit Foto vom Wackelzahn, Foto von der Lücke, einer kurzen Notiz und vielleicht einem Audio-Memo. Wenn der letzte Milchzahn raus ist, ist die Galaxie komplett. Was bleibt: eine kleine Welt voller Erinnerungen, die das Kind später als Erwachsene nochmal öffnen kann.
+      </p>
+      <div class="nope">
+        <strong>Kein Zahnarzt-Tool.</strong> Keine Statistik, keine Zahn-Erinnerungs-App, keine Cloud. Milky ist ein <em>Familien-Tagebuch</em> — ruhig, lokal, liebevoll. Ein Bilderbuch das die Kinder selbst mitschreiben.
+      </div>
+    </div>
+  </div>
+
+  <!-- Eckdaten -->
+  <div class="sec">
+    <div class="st">Eckdaten</div>
+    <div class="hero">
+      <div class="hc"><div class="n" style="color:var(--milky)">8</div><div class="l">Bauschritte</div><div class="d">1 fertig, Schritt 2 als nächstes</div></div>
+      <div class="hc"><div class="n" style="color:var(--rose)">20</div><div class="l">Milchzähne</div><div class="d">10 oben · 10 unten</div></div>
+      <div class="hc"><div class="n" style="color:var(--warm)">4</div><div class="l">Themes</div><div class="d">Galaxie · Riff · Wald · Wolke</div></div>
+      <div class="hc"><div class="n" style="color:var(--milky)">PWA</div><div class="l">Format</div><div class="d">Handy-Icon, offline</div></div>
+      <div class="hc"><div class="n" style="color:var(--teal)">IndexedDB</div><div class="l">Speicher</div><div class="d">Lokal, Fotos inklusive</div></div>
+    </div>
+  </div>
+
+  <!-- KERN-ENTSCHEIDUNGEN -->
+  <div class="sec">
+    <div class="st">Kern-Entscheidungen</div>
+    <div class="dg">
+
+      <div class="dc">
+        <div class="qid">Q1</div>
+        <h3>Format</h3>
+        <div class="answer">PWA mit Homescreen-Icon (kein Native, kein Tauri Mobile)</div>
+        <div class="reason">Anforderung: am Handy nutzen + speichern + später mit aktuellem Stand wiederöffnen, Fotos pro Zahn. Reine HTML+LocalStorage scheitert an Foto-Speichergrenzen und an mobilen <code>file://</code>-Quirks. Tauri Mobile ist noch unreif. PWA + IndexedDB ist die zuverlässigste Variante, "Installation" sind 2–3 Taps einmalig.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q2</div>
+        <h3>Stack</h3>
+        <div class="answer">Vite + React + TypeScript + idb (IndexedDB-Wrapper) + vite-plugin-pwa</div>
+        <div class="reason">Echo läuft Vanilla, weil dort ein Tray-Monitor mit fest verdrahteten Werten reicht. Milky ist state-getrieben (Themes, Multi-Kind, Modal-Flows, Diary, Audio, Foto-Logik) — Vanilla wäre möglich aber unnötig schmerzhaft. TypeScript fängt bei einem Datenmodell mit 20 Zähnen × Multi-Kind × Foto-Blobs Bugs früh.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q3</div>
+        <h3>Speicherung</h3>
+        <div class="answer">IndexedDB lokal, Fotos als Blob, Audio als Blob</div>
+        <div class="reason">Kein Backend, keine Cloud, kein Account. Daten leben dauerhaft auf dem Handy der Familie. Für Backup/Geräte-Wechsel: Export/Import als JSON-Datei mit eingebetteten Medien (Schritt 8).</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q4</div>
+        <h3>Personalisierung</h3>
+        <div class="answer">4 thematische Welten zur freien Auswahl statt Bub/Mädchen-Trennung</div>
+        <div class="reason">Galaxie · Korallenriff · Drachenwald · Wolkenreich. Inklusiver, zeitgemäßer, macht Kindern mehr Spaß weil sie selbst wählen. Klassische Geschlechtertrennung in Apps für Kinder fühlt sich heute überholt an.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q5</div>
+        <h3>Multi-Kind</h3>
+        <div class="answer">Von Anfang an, Avatar-Switcher im Header</div>
+        <div class="reason">Kosten gering, Mehrwert hoch: Geschwister, Patenkinder, Familien mit mehreren. Datenmodell ist von Anfang an pro Kind separiert — kein Refactor später.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q6</div>
+        <h3>Sternenkarte</h3>
+        <div class="answer">20 Sterne anatomisch arrangiert (10 oben, 10 unten), Konstellations-Linien beim Aktivieren</div>
+        <div class="reason">Statt klinischem Zahnschema eine warme Galaxie-Metapher. Stern dunkel = Zahn da, Stern leuchtend = Zahn raus + dokumentiert. Mit jedem dokumentierten Zahn zieht eine zarte Linie zum nächsten leuchtenden Stern — die Galaxie wächst sichtbar.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q7</div>
+        <h3>Tonalität</h3>
+        <div class="answer">Warm, leise poetisch, kindgerecht ohne kindisch — auch für Eltern lesenswert</div>
+        <div class="reason">"Festhalten" statt "Speichern". "Ein Stern hat angefangen zu leuchten" statt "Eintrag erstellt". Konsequent durchziehen, keine technischen UI-Begriffe. Funktioniert gleichzeitig für Kind UND mitlesende Eltern.</div>
+      </div>
+
+      <div class="dc">
+        <div class="qid">Q8</div>
+        <h3>Branding</h3>
+        <div class="answer">Studio-Logo nur dezent (Splash + Settings-Footer), App-DNA ist eigenständig</div>
+        <div class="reason">Studio bleibt Studio, Projekt bleibt Projekt. Fianuk-Logo (schlafende Katze, warm-pastellig) gehört nicht in die App-Aesthetik selbst — Milky hat sein eigenes Twilight-Galaxie-Profil. Branding-Dezenz analog zu Echo.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DREI SÄULEN -->
+  <div class="sec">
+    <div class="st">Designhaltung <span class="st-sub">— drei Säulen, eine Werthaltung</span></div>
+    <div class="pg">
+
+      <div class="pc">
+        <div class="pn">Säule 1</div>
+        <h3>Wachsende Galaxie</h3>
+        <div class="desc">Jeder Milchzahn ist ein Stern. Mit jedem Eintrag leuchtet einer mehr und eine zarte Linie zieht sich zur Konstellation. Der Fortschritt ist nicht Statistik, sondern eine sichtbare kleine Welt, die das Kind über Jahre selbst aufbaut. Letzter Milchzahn = Galaxie komplett.</div>
+        <div class="src">Inspiration: Doppeldeutigkeit Milchzahn / Milchstraße.</div>
+      </div>
+
+      <div class="pc">
+        <div class="pn">Säule 2</div>
+        <h3>Liebevoll, nicht spielerisch</h3>
+        <div class="desc">Keine Gamification mit Punkten, Streaks oder Level. Achievements sind Erinnerungs-Anker (erster Zahn, letzter Zahn), keine Belohnungs-Hooks. Milky soll sich anfühlen wie ein Tagebuch, nicht wie ein Spiel — auch wenn es bunt ist.</div>
+        <div class="src">Anti-Pattern: Habit-Tracker mit Streak-Druck.</div>
+      </div>
+
+      <div class="pc">
+        <div class="pn">Säule 3</div>
+        <h3>Lokal & still</h3>
+        <div class="desc">Keine Cloud, kein Account, keine Push-Benachrichtigungen, kein Tracking. Milky ist eine Familien-Insel auf einem Gerät — nichts verlässt das Handy außer durch bewussten Export. Die Eltern entscheiden, was wann gesichert wird.</div>
+        <div class="src">Privacy-first für ein Kinder-Tagebuch ist Pflicht, nicht Bonus.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- V1-SCOPE -->
+  <div class="sec">
+    <div class="st">V1-Scope <span class="st-sub">— was wir bauen, was wir bewusst weglassen</span></div>
+    <div class="scope">
+
+      <div class="sb in">
+        <h3><span class="marker"></span>Drin in V1</h3>
+        <ul>
+          <li>Sternenkarte mit 20 anatomisch arrangierten Sternen<span class="why">10 oben · 10 unten · mittig Schneidezähne · außen Backenzähne</span></li>
+          <li>Pro Zahn: Datum, Foto vorher, Foto nachher, Diary-Text<span class="why">Optional: Zahnfee/Maus, Audio-Memo</span></li>
+          <li>Konstellations-Linien zwischen leuchtenden Sternen<span class="why">Wachsende Galaxie als Fortschritts-Visual</span></li>
+          <li>Multi-Kind-Profile mit Header-Switcher<span class="why">Geschwister, Patenkinder</span></li>
+          <li>Vier Themes (Galaxie, Riff, Wald, Wolke) pro Kind wählbar<span class="why">Statt Bub/Mädchen-Klischee</span></li>
+          <li>Meilensteine mit Sternschnuppen-Animation<span class="why">Erster Zahn, 5/10/15, letzter Milchzahn</span></li>
+          <li>JSON-Export inkl. Fotos (Base64) für Backup<span class="why">Unabhängig von Geräte-Wechsel</span></li>
+          <li>JSON-Import zum Wiederherstellen<span class="why">Backup zurückspielen</span></li>
+          <li>PWA-Manifest, App-Icon, Homescreen-Installation<span class="why">Fühlt sich an wie eine echte App</span></li>
+          <li>Hosting auf GitHub Pages<span class="why">Kostenlos, ein Link reicht</span></li>
+        </ul>
+      </div>
+
+      <div class="sb out">
+        <h3><span class="marker"></span>Bewusst raus aus V1</h3>
+        <ul>
+          <li>Cloud-Sync, Multi-Device-Sync<span class="why">Lokal-only, kein Backend</span></li>
+          <li>Account-System, Login<span class="why">Eine Familie = ein Gerät = ein Datensatz</span></li>
+          <li>Push-Benachrichtigungen<span class="why">Verletzt "lokal & still"</span></li>
+          <li>Zahnarzt-Termine, Erinnerungen<span class="why">Andere Apps machen das besser</span></li>
+          <li>Statistiken, Charts, Vergleiche<span class="why">Tagebuch, kein Tracker</span></li>
+          <li>Geschwister-Vergleich, Familien-Bestenliste<span class="why">Kein Wettkampf zwischen Kindern</span></li>
+          <li>Social-Sharing direkt aus App<span class="why">Eltern teilen bewusst über System-Share, nicht App-Push</span></li>
+          <li>Maskottchen / animierter Begleiter<span class="why">Studio-Logo bleibt Studio-Logo, nicht in App-Inhalt</span></li>
+          <li>iOS-/Android-native Apps<span class="why">PWA reicht, kein Store-Aufwand</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MEILENSTEINE -->
+  <div class="sec">
+    <div class="st">Meilensteine <span class="st-sub">— acht Bauschritte, jeder einzeln testbar</span></div>
+    <div class="tl">
+
+      <div class="ti done">
+        <div class="mn">Schritt 1 — Projekt-Setup <span class="ml">abgeschlossen</span></div>
+        <div class="md">Projektordner <code>milky/</code> auf dem Desktop, analog zu Echo strukturiert (<code>src/</code>, <code>public/</code>, <code>docs/</code>, <code>_backup/</code>, <code>assets/</code>). Vite + React + TypeScript + idb + vite-plugin-pwa als Stack. Hello-World-Welcome-Screen mit Twilight-Galaxie-Hintergrund (Nebel-Drift, Stern-Twinkle). Diese Übersichts-HTML <code>docs/01-uebersicht.html</code> analog Echo, eigene Milky-Palette. Abgeschlossen 2026-05-03.</div>
+      </div>
+
+      <div class="ti next">
+        <div class="mn">Schritt 2 — Sternenhimmel-Grundansicht <span class="ml">aktuell</span></div>
+        <div class="md">20 Sterne anatomisch arrangiert auf der Twilight-Galaxie. 10 oben, 10 unten, mittig Schneidezähne, außen Backenzähne. Sterne flimmern subtil. Tap auf Stern öffnet leeren Detail-Screen (Platzhalter). Noch keine Speicherung — reine Optik und Layout-Grundlage.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 3 — Profil &amp; Multi-Kind</div>
+        <div class="md">Onboarding (Welcome, Profil anlegen mit Name + Foto + Geburtsdatum, Theme-Auswahl). Header mit Avatar + Switcher für mehrere Kinder. Daten persistent in IndexedDB.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 4 — Zahn-Eintrag</div>
+        <div class="md">Tap auf Stern öffnet Formular: Datum, Foto vorher, Foto nachher, Diary-Text. Speichern → Stern leuchtet auf, zarte Konstellations-Linie zieht sich zum nächsten leuchtenden Stern. Fotos als Blob in IndexedDB.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 5 — Diary-Erweiterungen</div>
+        <div class="md">Optionales Feld "Zahnfee/Maus gebracht". Optionales Audio-Memo (~10 Sek. via MediaRecorder). Einträge editier- und löschbar.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 6 — Themes</div>
+        <div class="md">Drei weitere Themes (Korallenriff, Drachenwald, Wolkenreich) mit eigenen Akzentfarben + Stern-Glyphen. Pro Kind im Settings umschaltbar. Sound-Toggle, optional Hellmodus.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 7 — Meilensteine</div>
+        <div class="md">Achievement-Logik: erster Zahn, erster oberer Zahn, 5/10/15 Zähne, letzter Milchzahn. Sternschnuppen-Animation beim Freischalten. Meilenstein-Liste in Settings.</div>
+      </div>
+
+      <div class="ti">
+        <div class="mn">Schritt 8 — Export/Import &amp; Hosting</div>
+        <div class="md">JSON-Export (alle Daten + Fotos als Base64 + Audio). Import zum Wiederherstellen. Finales App-Icon, Splash, PWA-Manifest. Build und Hosting auf GitHub Pages — Link für Verteilung an Familie/Freunde.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RISIKEN -->
+  <div class="sec">
+    <div class="st">Risiken &amp; Mitigation</div>
+    <div class="rg">
+
+      <div class="rc med">
+        <span class="sev">Mittel</span>
+        <h3>iOS-Storage-Eviction</h3>
+        <div class="desc">Safari/iOS löscht IndexedDB-Daten von Websites, die längere Zeit nicht geöffnet wurden (~7 Tage Untouched-Threshold). Bei einem Tagebuch das nur alle paar Monate genutzt wird, ein realer Risikofaktor.</div>
+        <div class="mit"><strong>Mitigation:</strong> Beim ersten Öffnen klar zur Homescreen-Installation einladen — installierte PWAs sind von Eviction ausgenommen. Zusätzlich: regelmäßige Erinnerung an JSON-Export im Settings-Bereich. Schritt 8 macht Export idiotensicher.</div>
+      </div>
+
+      <div class="rc med">
+        <span class="sev">Mittel</span>
+        <h3>Foto-Speichermenge</h3>
+        <div class="desc">20 Zähne × 2 Fotos × Multi-Kind kann schnell mehrere hundert MB werden, wenn Original-Handyfotos gespeichert werden. IndexedDB hat zwar genug Platz, aber Export/Import wird unhandlich.</div>
+        <div class="mit"><strong>Mitigation:</strong> Beim Import auf Web-taugliche Größe runterskalieren (z.B. max. 1600px Kantenlänge, JPEG quality 0.85). Original bleibt am Handy, in der App reicht das skalierte Bild.</div>
+      </div>
+
+      <div class="rc low">
+        <span class="sev">Niedrig</span>
+        <h3>Browser-Inkompatibilität bei MediaRecorder</h3>
+        <div class="desc">Audio-Aufnahme in Schritt 5 nutzt MediaRecorder API. Auf älteren iOS-Versionen (~iOS 14) gab es WebKit-Quirks bei Codec-Auswahl.</div>
+        <div class="mit"><strong>Mitigation:</strong> Audio ist optional. Codec-Detection via <code>MediaRecorder.isTypeSupported</code>, Fallback-Codec-Reihenfolge. Bei totalem Fehlschlag: Audio-Feld einfach ausblenden, App funktioniert weiter.</div>
+      </div>
+
+      <div class="rc low">
+        <span class="sev">Niedrig</span>
+        <h3>GitHub-Pages-Hosting für privates Repo</h3>
+        <div class="desc">Pages braucht entweder ein öffentliches Repo oder einen GitHub-Pro-Plan für privates Repo. Der freigegebene Link wäre dann öffentlich auffindbar (auch wenn Inhalt nichts personalisiertes hat — die App ist leer bis Daten reinkommen).</div>
+        <div class="mit"><strong>Mitigation:</strong> Repo öffentlich, App-Inhalt selbst harmlos (kein Daten-Endpunkt). Personenbezogene Daten leben nur lokal beim Nutzer. Link weitergeben an Familie/Freunde ist okay.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPEN QUESTIONS -->
+  <div class="sec">
+    <div class="st">Offene Fragen</div>
+    <div class="oq">
+      <h3>Was noch zu klären ist</h3>
+      <ul>
+        <li>Soll der "Letzter Milchzahn"-Meilenstein einen besonders großen Moment bekommen (Vollbild-Animation, Galaxie-komplett-Karte zum Teilen)?</li>
+        <li>Sollen Eltern beim Zahn-Eintrag optional noch ein Feld "Wie ist er rausgekommen?" bekommen, oder reicht das im Diary-Text?</li>
+        <li>Wenn Geburtsdatum gesetzt ist: soll Milky beim Eintrag automatisch das Alter mitschreiben? (Schön für später, aber privacy-affin sein.)</li>
+        <li>Soll der Theme-Wechsel pro Kind auch nachträglich gehen, oder nur beim Onboarding gewählt werden?</li>
+        <li>Soll es einen "Teilen-Knopf" geben (System-Share-Sheet mit einem hübsch gerenderten Stern-Bild), oder bewusst nicht?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="sec">
+    <div class="st">Quellen &amp; Links</div>
+    <div class="nav">
+      <a class="nl" href="#" id="repo-link">
+        <div class="nlt">GitHub-Repository</div>
+        <div class="nld">PaulchenPanther1951/Milky · Quellcode, Commits, Issues · privates Repo (Link wird in Schritt 8 final aktiv)</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="echo">„Eine kleine Galaxie für jeden ausgefallenen Milchzahn."</div>
+    Milky &middot; v0.0.1 &middot; Mai 2026
+    <div class="studio-foot">
+      <img src="assets/fianuk_logo.png" alt="Fianuk Studio">
+      <span class="signature">Fianuk Studio</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
