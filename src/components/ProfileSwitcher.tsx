@@ -4,6 +4,9 @@ import { useSettings } from "../lib/settings-context";
 import { Avatar } from "./Avatar";
 import { ProfileEditor } from "./ProfileEditor";
 import { applyTheme } from "../lib/themes";
+import { MILESTONES, computeAchieved } from "../lib/milestones";
+import { listEntriesByProfile } from "../lib/db";
+import type { ToothEntry } from "../types";
 
 interface Props {
   onClose: () => void;
@@ -13,7 +16,8 @@ type Mode =
   | { kind: "list" }
   | { kind: "add" }
   | { kind: "edit"; profileId: string }
-  | { kind: "settings" };
+  | { kind: "settings" }
+  | { kind: "milestones" };
 
 export function ProfileSwitcher({ onClose }: Props) {
   const { profiles, activeProfile, setActiveProfile, saveProfile, deleteProfile } =
@@ -109,6 +113,13 @@ export function ProfileSwitcher({ onClose }: Props) {
             <button
               type="button"
               className="btn btn-ghost btn-block settings-link"
+              onClick={() => setMode({ kind: "milestones" })}
+            >
+              Meilensteine
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost btn-block settings-link"
               onClick={() => setMode({ kind: "settings" })}
             >
               Einstellungen
@@ -197,8 +208,44 @@ export function ProfileSwitcher({ onClose }: Props) {
             </>
           );
         })()}
+
+        {mode.kind === "milestones" && activeProfile && (
+          <MilestonesPane profileId={activeProfile.id} profileName={activeProfile.name} />
+        )}
       </div>
     </div>
+  );
+}
+
+function MilestonesPane({ profileId, profileName }: { profileId: string; profileName: string }) {
+  const [entries, setEntries] = useState<ToothEntry[] | null>(null);
+  useEffect(() => {
+    listEntriesByProfile(profileId).then(setEntries);
+  }, [profileId]);
+
+  const achieved = entries ? new Set(computeAchieved(entries)) : new Set<string>();
+
+  return (
+    <>
+      <p className="modal-kicker">Meilensteine</p>
+      <h2 className="modal-title">{profileName}s Galaxie</h2>
+      <ul className="milestone-list">
+        {MILESTONES.map((m) => {
+          const unlocked = achieved.has(m.id);
+          return (
+            <li key={m.id} className={`milestone-item ${unlocked ? "unlocked" : "locked"}`}>
+              <span className="milestone-dot" aria-hidden="true">
+                {unlocked ? "✦" : "·"}
+              </span>
+              <div className="milestone-text">
+                <span className="milestone-name">{m.name}</span>
+                <span className="milestone-desc-small">{m.description}</span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 

@@ -1,11 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ProfileProvider, useProfileContext } from "./lib/profile-context";
 import { SettingsProvider } from "./lib/settings-context";
 import { useEntries } from "./lib/use-entries";
+import { computeAchieved } from "./lib/milestones";
 import { StarSky } from "./components/StarSky";
 import { StarDetail } from "./components/StarDetail";
 import { Onboarding } from "./components/Onboarding";
 import { AppHeader } from "./components/AppHeader";
+import { MilestoneCelebration } from "./components/MilestoneCelebration";
 
 export default function App() {
   return (
@@ -49,10 +51,39 @@ function BootScreen() {
 }
 
 function MainView() {
-  const { activeProfile } = useProfileContext();
+  const { activeProfile, saveProfile } = useProfileContext();
   const profileId = activeProfile?.id;
   const { entries, refresh } = useEntries(profileId);
   const [selectedToothId, setSelectedToothId] = useState<string | null>(null);
+  const [celebrationQueue, setCelebrationQueue] = useState<string[]>([]);
+
+  const baselineEstablishedRef = useRef<string | null>(null);
+
+  // Reset baseline tracking when active profile changes
+  useEffect(() => {
+    baselineEstablishedRef.current = null;
+  }, [profileId]);
+
+  // Watch for newly satisfied milestones
+  useEffect(() => {
+    if (!activeProfile) return;
+    const achieved = computeAchieved(entries);
+    const celebrated = activeProfile.celebratedMilestones;
+
+    // First time tracking for this profile: silently set baseline
+    if (celebrated === undefined && baselineEstablishedRef.current !== activeProfile.id) {
+      baselineEstablishedRef.current = activeProfile.id;
+      saveProfile({ ...activeProfile, celebratedMilestones: achieved });
+      return;
+    }
+
+    if (!celebrated) return;
+    const newOnes = achieved.filter((id) => !celebrated.includes(id));
+    if (newOnes.length > 0) {
+      setCelebrationQueue((q) => [...q, ...newOnes]);
+      saveProfile({ ...activeProfile, celebratedMilestones: [...celebrated, ...newOnes] });
+    }
+  }, [entries, activeProfile, saveProfile]);
 
   const litToothIds = useMemo(() => new Set(entries.map((e) => e.toothId)), [entries]);
   const existingEntry = useMemo(() => {
@@ -86,6 +117,13 @@ function MainView() {
         onClose={() => setSelectedToothId(null)}
         onSaved={refresh}
       />
+      {celebrationQueue.length > 0 && (
+        <MilestoneCelebration
+          key={celebrationQueue[0]}
+          milestoneId={celebrationQueue[0]}
+          onDismiss={() => setCelebrationQueue((q) => q.slice(1))}
+        />
+      )}
     </>
   );
 }

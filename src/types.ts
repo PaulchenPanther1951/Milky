@@ -28,6 +28,12 @@ export interface Profile {
   photoKey?: string;
   theme: ThemeKey;
   createdAt: string;
+  /**
+   * Milestone IDs that have already been celebrated for this profile.
+   * undefined = never tracked (silent baseline on next entries refresh).
+   * empty array = baseline established, no celebrations yet.
+   */
+  celebratedMilestones?: string[];
 }
 
 export interface ToothEntry {

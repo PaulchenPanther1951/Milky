@@ -1108,6 +1108,124 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 0 12px rgba(216, 196, 255, 0.5);
 }
 
+/* ===== Milestones (Schritt 7) ===== */
+
+/* Celebration modal */
+.milestone-veil {
+  background: radial-gradient(ellipse at center, rgba(12, 10, 31, 0.55) 0%, rgba(12, 10, 31, 0.92) 90%);
+  overflow: hidden;
+}
+.milestone-card {
+  text-align: center;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft), 0 18px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px var(--accent-soft);
+}
+.milestone-kicker {
+  color: var(--accent-warm) !important;
+}
+.milestone-title {
+  font-size: 2rem !important;
+  margin-top: 0.4rem !important;
+}
+.milestone-desc {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.55;
+  margin: 0.6rem 0 1.6rem;
+}
+
+/* Shooting star sweep */
+.shooting-star {
+  position: absolute;
+  top: 12vh;
+  left: -10vw;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  animation: shootSweep 1.6s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+  transform: rotate(20deg);
+}
+@keyframes shootSweep {
+  0%   { transform: translate(0, 0) rotate(20deg); opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate(120vw, 40vh) rotate(20deg); opacity: 0; }
+}
+.shooting-star-head {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, var(--accent-warm) 60%, transparent 100%);
+  box-shadow: 0 0 18px var(--accent-warm), 0 0 40px var(--accent);
+}
+.shooting-star-trail {
+  position: absolute;
+  top: 4px; left: -120px;
+  width: 130px; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-warm) 60%, #fff 100%);
+  filter: blur(0.5px);
+  border-radius: 2px;
+}
+
+/* Milestones pane in switcher */
+.milestone-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.milestone-item.unlocked {
+  border-color: var(--accent-soft);
+  background: rgba(216, 196, 255, 0.05);
+}
+.milestone-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+.milestone-item.unlocked .milestone-dot {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
+  color: #1a1538;
+  box-shadow: 0 0 16px var(--accent-soft);
+}
+.milestone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.milestone-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text);
+}
+.milestone-item.locked .milestone-name { color: var(--text-dim); }
+.milestone-desc-small {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  font-style: italic;
+  line-height: 1.45;
+}
+
 /* Smaller phones */
 @media (max-width: 380px) {
   .star-sky { width: 96vw; }
@@ -1116,4 +1234,5 @@ img { max-width: 100%; display: block; }
   .profile-button { gap: 10px; padding: 8px 14px 8px 8px; }
   .profile-meta .kid-name { font-size: 1rem; }
   .photo-row { gap: 8px; }
+  .milestone-title { font-size: 1.6rem !important; }
 }
