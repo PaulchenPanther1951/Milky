@@ -387,8 +387,8 @@ body::after{
   <div class="brand-hero">
     <h1>MILKY</h1>
     <div class="sub">Eine kleine Galaxie für jeden ausgefallenen Milchzahn</div>
-    <div class="tag">Projekt-Übersicht &middot; Schritt 1 abgeschlossen — Schritt 2 als nächstes</div>
-    <div class="vbadge">v0.0.1 &middot; 1 von 8 Schritten</div>
+    <div class="tag">Projekt-Übersicht &middot; alle 8 Bauschritte abgeschlossen — bereit für ausführlichen Test</div>
+    <div class="vbadge">v0.1.0 &middot; 8 von 8 Schritten</div>
   </div>
 
   <!-- VISION -->
@@ -411,7 +411,7 @@ body::after{
   <div class="sec">
     <div class="st">Eckdaten</div>
     <div class="hero">
-      <div class="hc"><div class="n" style="color:var(--milky)">8</div><div class="l">Bauschritte</div><div class="d">1 fertig, Schritt 2 als nächstes</div></div>
+      <div class="hc"><div class="n" style="color:var(--milky)">8</div><div class="l">Bauschritte</div><div class="d">alle abgeschlossen</div></div>
       <div class="hc"><div class="n" style="color:var(--rose)">20</div><div class="l">Milchzähne</div><div class="d">10 oben · 10 unten</div></div>
       <div class="hc"><div class="n" style="color:var(--warm)">4</div><div class="l">Themes</div><div class="d">Galaxie · Riff · Wald · Wolke</div></div>
       <div class="hc"><div class="n" style="color:var(--milky)">PWA</div><div class="l">Format</div><div class="d">Handy-Icon, offline</div></div>
@@ -561,39 +561,39 @@ body::after{
         <div class="md">Projektordner <code>milky/</code> auf dem Desktop, analog zu Echo strukturiert (<code>src/</code>, <code>public/</code>, <code>docs/</code>, <code>_backup/</code>, <code>assets/</code>). Vite + React + TypeScript + idb + vite-plugin-pwa als Stack. Hello-World-Welcome-Screen mit Twilight-Galaxie-Hintergrund (Nebel-Drift, Stern-Twinkle). Diese Übersichts-HTML <code>docs/01-uebersicht.html</code> analog Echo, eigene Milky-Palette. Abgeschlossen 2026-05-03.</div>
       </div>
 
-      <div class="ti next">
-        <div class="mn">Schritt 2 — Sternenhimmel-Grundansicht <span class="ml">aktuell</span></div>
-        <div class="md">20 Sterne anatomisch arrangiert auf der Twilight-Galaxie. 10 oben, 10 unten, mittig Schneidezähne, außen Backenzähne. Sterne flimmern subtil. Tap auf Stern öffnet leeren Detail-Screen (Platzhalter). Noch keine Speicherung — reine Optik und Layout-Grundlage.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 2 — Sternenhimmel-Grundansicht <span class="ml">abgeschlossen</span></div>
+        <div class="md">20 Sterne anatomisch auf einer ruhigen Smile-Arc, Größe variiert leicht nach Zahntyp (Backenzähne markant, Schneidezähne zart). Subtiles Pulsieren im Dim-State. Tap öffnet zunächst Platzhalter-Modal (in Schritt 4 zur echten Detail-Karte ausgebaut).</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 3 — Profil &amp; Multi-Kind</div>
-        <div class="md">Onboarding (Welcome, Profil anlegen mit Name + Foto + Geburtsdatum, Theme-Auswahl). Header mit Avatar + Switcher für mehrere Kinder. Daten persistent in IndexedDB.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 3 — Profil &amp; Multi-Kind <span class="ml">abgeschlossen</span></div>
+        <div class="md">IndexedDB via idb mit Stores für profiles, entries, photos, audio, meta — Cascade-Delete inklusive. Onboarding: Welcome + ProfileEditor (Name, Foto via Canvas auf max. 800px komprimiert, Geburtsdatum, Theme-Auswahl mit Live-Preview). Header zeigt aktiven Avatar; Tap öffnet Switcher mit "+ Neues Kind" und Edit-/Delete-Flows.</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 4 — Zahn-Eintrag</div>
-        <div class="md">Tap auf Stern öffnet Formular: Datum, Foto vorher, Foto nachher, Diary-Text. Speichern → Stern leuchtet auf, zarte Konstellations-Linie zieht sich zum nächsten leuchtenden Stern. Fotos als Blob in IndexedDB.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 4 — Zahn-Eintrag <span class="ml">abgeschlossen</span></div>
+        <div class="md">Echte Detail-Karte: Datum (default heute), zwei Foto-Slots (vorher/nachher) mit Kompression auf 1600px, freier Diary-Text. Bei gesetztem Geburtsdatum wird das Alter zum Ereignis automatisch dazugeschrieben. Speichern lässt den Stern aufleuchten; SVG-Konstellations-Linien zeichnen sich chronologisch nach. Edit + Delete inklusive Cascade-Cleanup der Medien.</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 5 — Diary-Erweiterungen</div>
-        <div class="md">Optionales Feld "Zahnfee/Maus gebracht". Optionales Audio-Memo (~10 Sek. via MediaRecorder). Einträge editier- und löschbar.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 5 — Diary-Erweiterungen <span class="ml">abgeschlossen</span></div>
+        <div class="md">MediaRecorder-basiertes Audio-Memo bis 30 Sek. mit Codec-Detection (webm/opus, mp4, aac, ogg) und Fallback. Live-Pulse während der Aufnahme, nativer Audio-Player beim Wiedergeben, Re-Take + Entfernen. Optionales "Zahnfee/Maus gebracht"-Feld, eltern-getriggert via Klapp-Knopf.</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 6 — Themes</div>
-        <div class="md">Drei weitere Themes (Korallenriff, Drachenwald, Wolkenreich) mit eigenen Akzentfarben + Stern-Glyphen. Pro Kind im Settings umschaltbar. Sound-Toggle, optional Hellmodus.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 6 — Themes &amp; Sound-Toggle <span class="ml">abgeschlossen</span></div>
+        <div class="md">Vier Themes (Galaxie, Korallenriff, Drachenwald, Wolkenreich) als CSS-Variablen-Patches auf root. Settings-Pane mit Sound-Toggle (defaulted off, "lokal &amp; still"). WebAudio-Chimes statt Asset-Files: Zwei-Noten-Glöckchen beim ersten Aufleuchten, Major-Arpeggio + Sparkle für Meilensteine.</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 7 — Meilensteine</div>
-        <div class="md">Achievement-Logik: erster Zahn, erster oberer Zahn, 5/10/15 Zähne, letzter Milchzahn. Sternschnuppen-Animation beim Freischalten. Meilenstein-Liste in Settings.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 7 — Meilensteine <span class="ml">abgeschlossen</span></div>
+        <div class="md">Sechs Stufen: erster Stern, erster oberer Stern, fünf, halbzeit (10), drei viertel (15), Galaxie komplett (20). Berechnung als reine Funktion über entries. celebratedMilestones pro Profil verhindert Wiederholung beim App-Restart; Erstkontakt setzt silent eine Baseline. Sternschnuppen-Sweep + Modal-Karte beim Freischalten, plus durchblätterbare Liste im Settings-Pane.</div>
       </div>
 
-      <div class="ti">
-        <div class="mn">Schritt 8 — Export/Import &amp; Hosting</div>
-        <div class="md">JSON-Export (alle Daten + Fotos als Base64 + Audio). Import zum Wiederherstellen. Finales App-Icon, Splash, PWA-Manifest. Build und Hosting auf GitHub Pages — Link für Verteilung an Familie/Freunde.</div>
+      <div class="ti done">
+        <div class="mn">Schritt 8 — Export/Import + PWA-Polish + Deploy <span class="ml">abgeschlossen</span></div>
+        <div class="md">Export erzeugt eine milky-backup-YYYY-MM-DD.json mit allen Profilen, Sternen, Fotos (Base64) und Audio. Re-Import überschreibt nach Confirm den lokalen Stand. App-Icons (192/512/180/maskable-512) aus Master-SVG via sharp generiert; Manifest mit korrektem purpose, apple-touch-icon-Link in index.html. GitHub-Actions-Workflow steht bereit (build + deploy-pages); aktiviert sich, sobald das Repo auf public geschaltet und Pages-Source auf "GitHub Actions" gestellt wird.</div>
       </div>
 
     </div>
