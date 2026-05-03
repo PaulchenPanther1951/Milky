@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ProfileProvider, useProfileContext } from "./lib/profile-context";
+import { SettingsProvider } from "./lib/settings-context";
 import { useEntries } from "./lib/use-entries";
 import { StarSky } from "./components/StarSky";
 import { StarDetail } from "./components/StarDetail";
@@ -8,9 +9,11 @@ import { AppHeader } from "./components/AppHeader";
 
 export default function App() {
   return (
-    <ProfileProvider>
-      <Shell />
-    </ProfileProvider>
+    <SettingsProvider>
+      <ProfileProvider>
+        <Shell />
+      </ProfileProvider>
+    </SettingsProvider>
   );
 }
 

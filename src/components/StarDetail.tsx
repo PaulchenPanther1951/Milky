@@ -3,6 +3,8 @@ import type { Profile, ToothEntry } from "../types";
 import { findTooth } from "../lib/teeth";
 import { entryIdFor } from "../lib/use-entries";
 import { savePhoto, deletePhoto, saveAudio, deleteAudio, putEntry, deleteEntry } from "../lib/db";
+import { useSettings } from "../lib/settings-context";
+import { playStarLight } from "../lib/sound";
 import { PhotoSlot, type PhotoSlotState } from "./PhotoSlot";
 import { AudioMemo, type AudioSlotState } from "./AudioMemo";
 
@@ -33,6 +35,7 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
   const [afterSlot, setAfterSlot] = useState<PhotoSlotState>(() => emptyPhotoSlot(existingEntry?.photoAfterKey));
   const [audioSlot, setAudioSlot] = useState<AudioSlotState>(() => emptyAudioSlot(existingEntry?.audioMemoKey));
   const [submitting, setSubmitting] = useState(false);
+  const { soundsEnabled } = useSettings();
 
   const tooth = useMemo(() => (toothId ? findTooth(toothId) : undefined), [toothId]);
 
@@ -118,6 +121,7 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
         updatedAt: now,
       };
       await putEntry(entry);
+      if (!isExisting) playStarLight(soundsEnabled);
       onSaved();
       onClose();
     } finally {

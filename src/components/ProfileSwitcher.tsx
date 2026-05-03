@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProfileContext } from "../lib/profile-context";
+import { useSettings } from "../lib/settings-context";
 import { Avatar } from "./Avatar";
 import { ProfileEditor } from "./ProfileEditor";
 import { applyTheme } from "../lib/themes";
@@ -11,11 +12,13 @@ interface Props {
 type Mode =
   | { kind: "list" }
   | { kind: "add" }
-  | { kind: "edit"; profileId: string };
+  | { kind: "edit"; profileId: string }
+  | { kind: "settings" };
 
 export function ProfileSwitcher({ onClose }: Props) {
   const { profiles, activeProfile, setActiveProfile, saveProfile, deleteProfile } =
     useProfileContext();
+  const { soundsEnabled, setSoundsEnabled } = useSettings();
   const [mode, setMode] = useState<Mode>({ kind: "list" });
 
   useEffect(() => {
@@ -103,6 +106,45 @@ export function ProfileSwitcher({ onClose }: Props) {
             <button type="button" className="btn btn-ghost btn-block" onClick={() => setMode({ kind: "add" })}>
               + Neues Kind
             </button>
+            <button
+              type="button"
+              className="btn btn-ghost btn-block settings-link"
+              onClick={() => setMode({ kind: "settings" })}
+            >
+              Einstellungen
+            </button>
+          </>
+        )}
+
+        {mode.kind === "settings" && (
+          <>
+            <p className="modal-kicker">Einstellungen</p>
+            <h2 className="modal-title">Wie soll Milky sein?</h2>
+
+            <div className="settings-group">
+              <label className="settings-row">
+                <div className="settings-row-text">
+                  <span className="settings-row-name">Sounds</span>
+                  <span className="settings-row-sub">
+                    Ein leises Glöckchen, wenn ein Stern aufleuchtet.
+                  </span>
+                </div>
+                <span className={`switch ${soundsEnabled ? "on" : ""}`}>
+                  <input
+                    type="checkbox"
+                    checked={soundsEnabled}
+                    onChange={(e) => setSoundsEnabled(e.target.checked)}
+                  />
+                  <span className="switch-track" />
+                  <span className="switch-thumb" />
+                </span>
+              </label>
+            </div>
+
+            <p className="settings-hint">
+              Das Theme (Galaxie, Korallenriff, Drachenwald, Wolkenreich) waehlst du im
+              jeweiligen Profil — tippe in der Liste auf das Stift-Symbol neben einem Kind.
+            </p>
           </>
         )}
 
