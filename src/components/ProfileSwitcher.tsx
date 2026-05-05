@@ -339,7 +339,7 @@ function AboutPane() {
 
       <section className="about-brand">
         <img
-          src="/branding/fianuk-logo.png"
+          src="./branding/fianuk-logo.png"
           alt="Fianuk Studio"
           className="about-fianuk-logo"
           width={120}

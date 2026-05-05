@@ -13,7 +13,7 @@ export function Onboarding() {
         <div className="onboarding-screen welcome-screen">
           <div className="fianuk-presents">
             <img
-              src="/branding/fianuk-logo.png"
+              src="./branding/fianuk-logo.png"
               alt="Fianuk Studio"
               className="fianuk-logo"
               width={140}
