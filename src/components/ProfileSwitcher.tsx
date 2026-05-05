@@ -8,6 +8,7 @@ import { MILESTONES, computeAchieved } from "../lib/milestones";
 import { listEntriesByProfile } from "../lib/db";
 import type { ToothEntry } from "../types";
 import { ExportImport } from "./ExportImport";
+import { checkPersisted, requestPersist, getStorageInfo, type PersistState, type StorageInfo } from "../lib/persist";
 
 interface Props {
   onClose: () => void;
@@ -309,11 +310,13 @@ function AboutPane() {
           </li>
           <li className="about-list-warn">
             <strong>Wichtig:</strong> Wenn du den Browser-Speicher leerst oder Milky
-            deinstallierst (z.B. Cache löschen), gehen die lokalen Daten verloren —
-            mach also regelmäßig ein Backup.
+            deinstallierst, gehen die lokalen Daten verloren — bewahre für den
+            Gerätewechsel ein Backup auf.
           </li>
         </ul>
       </section>
+
+      <PersistStatusBlock />
 
       <section className="about-block">
         <h3 className="about-block-title">
@@ -385,6 +388,102 @@ function AboutPane() {
         </p>
       </section>
     </>
+  );
+}
+
+function PersistStatusBlock() {
+  const [state, setState] = useState<PersistState | "loading">("loading");
+  const [info, setInfo] = useState<StorageInfo | null>(null);
+  const [requesting, setRequesting] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [s, i] = await Promise.all([checkPersisted(), getStorageInfo()]);
+      if (cancelled) return;
+      setState(s);
+      setInfo(i);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  async function handleRequest() {
+    setRequesting(true);
+    try {
+      const next = await requestPersist();
+      setState(next);
+    } finally {
+      setRequesting(false);
+    }
+  }
+
+  const isGranted = state === "granted";
+  const canRequest = state === "prompt-needed";
+  const unsupported = state === "unsupported";
+
+  return (
+    <section className="about-block">
+      <h3 className="about-block-title">
+        <span className="about-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7">
+            <rect x="4" y="6" width="16" height="13" rx="2" />
+            <path d="M8 6V4a4 4 0 018 0v2" strokeLinecap="round" />
+            <circle cx="12" cy="13" r="1.6" fill="currentColor" />
+          </svg>
+        </span>
+        Speicher auf deinem Gerät
+      </h3>
+
+      <div className={`persist-status persist-${isGranted ? "ok" : canRequest ? "warn" : "neutral"}`}>
+        {state === "loading" && (
+          <p className="persist-status-text">Prüfe Speicher-Status…</p>
+        )}
+
+        {isGranted && (
+          <>
+            <p className="persist-status-text">
+              <strong>Dauerhaft gesichert ✓</strong>
+              <br />
+              Dein Browser hat Milkys Daten als wichtig markiert — sie werden nicht
+              automatisch aufgeräumt, wenn der Speicher knapp wird.
+            </p>
+          </>
+        )}
+
+        {canRequest && (
+          <>
+            <p className="persist-status-text">
+              Milky kann deinen Browser bitten, die Daten <strong>dauerhaft</strong>{" "}
+              auf deinem Gerät zu behalten — wie eine echte App. Ohne Cloud, ohne
+              Server, alles bleibt bei dir.
+            </p>
+            <button
+              type="button"
+              className="btn btn-primary btn-block"
+              onClick={handleRequest}
+              disabled={requesting}
+            >
+              {requesting ? "…" : "Dauerhaft auf diesem Gerät speichern"}
+            </button>
+          </>
+        )}
+
+        {unsupported && (
+          <p className="persist-status-text">
+            Dein Browser unterstützt kein dauerhaftes Markieren von App-Daten —
+            mach bitte regelmäßig ein Backup über{" "}
+            <em>Einstellungen → Backup &amp; Wiederherstellen</em>.
+          </p>
+        )}
+
+        {info && (
+          <p className="persist-storage-info">
+            Belegt: {info.usedLabel}
+            {info.quotaBytes > 0 && <> · verfügbar: {info.quotaLabel}</>}
+          </p>
+        )}
+      </div>
+    </section>
   );
 }
 

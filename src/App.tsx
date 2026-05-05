@@ -140,7 +140,7 @@ function MainView() {
               <path d="M10 3v9m0 0l-3-3m3 3l3-3" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2" strokeLinecap="round" />
             </svg>
-            Tipp: Sichere deine Sterne regelmäßig — <em>Profil → Einstellungen → Backup</em>
+            Tipp: Backup für den Gerätewechsel — <em>Profil → Einstellungen → Backup</em>
           </p>
         )}
         <p className="footer-brand">

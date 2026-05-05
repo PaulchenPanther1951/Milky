@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProfileEditor } from "./ProfileEditor";
 import { useProfileContext } from "../lib/profile-context";
+import { requestPersist } from "../lib/persist";
 
 export function Onboarding() {
   const { saveProfile } = useProfileContext();
@@ -48,6 +49,7 @@ export function Onboarding() {
           <ProfileEditor
             onSubmit={async (profile) => {
               await saveProfile(profile);
+              try { await requestPersist(); } catch { /* silent */ }
             }}
             submitLabel="Galaxie eröffnen"
           />
