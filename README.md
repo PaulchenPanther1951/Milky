@@ -4,6 +4,14 @@ Eine kleine Galaxie fuer jeden ausgefallenen Milchzahn.
 
 Milky ist ein liebevolles Tagebuch fuer Kinder und Eltern: jeder Milchzahn wird zu einem Stern in einer wachsenden Konstellation. Foto vor dem Ausfall, Foto nachher, kurze Notiz, vielleicht ein Audio-Memo — und am Ende, wenn der letzte Milchzahn raus ist, ist die Galaxie komplett.
 
+> **Privates Hobbyprojekt — keine kommerzielle Absicht.** Keine Werbung, keine
+> Spenden, keine Datenverarbeitung auf Servern, keine Gewerbeanmeldung.
+> „Fianuk Studio" ist ein privater Projektname, kein Unternehmen.
+> Nutzung auf eigenes Risiko, ohne Gewährleistung. Quellcode unter
+> [MIT-Lizenz](./LICENSE) — frei nutzbar.
+>
+> Verantwortlich (privat): Maximilian Otto Paul · maximilian.otto.paul@web.de
+
 ## Tech
 
 Vite + React + TypeScript + IndexedDB (`idb`) + PWA (`vite-plugin-pwa`).
@@ -42,6 +50,19 @@ Es liegt ein Workflow unter `.github/workflows/deploy.yml`. Aktivierung:
 
 `docs/01-uebersicht.html` — komplette Roadmap, Vision, Entscheidungen, Meilensteine.
 
+## Lizenz
+
+[MIT](./LICENSE) — Copyright (c) 2026 Maximilian Otto Paul.
+Die Software wird „as is" zur Verfügung gestellt, ohne jegliche Gewährleistung.
+
 ## by Fianuk Studio
 
-Privates Studio-Projekt. Made with care.
+Milky entsteht als **privates Hobbyprojekt** in der Freizeit — ohne Gewerbe,
+ohne Gewinnerzielungsabsicht, ohne Werbung, ohne Datensammlung.
+„Fianuk Studio" ist ein privater Projektname, kein Unternehmen, keine Marke,
+keine juristische Person.
+
+**Verantwortlich (privat):** Maximilian Otto Paul
+**Kontakt:** maximilian.otto.paul@web.de
+
+Made with care.

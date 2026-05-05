@@ -337,6 +337,41 @@ function AboutPane() {
         </p>
       </section>
 
+      <section className="about-block about-legal">
+        <h3 className="about-block-title">
+          <span className="about-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <path d="M12 3v18M5 8h14M5 16h14" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          Privates Hobbyprojekt
+        </h3>
+        <p className="about-legal-text">
+          Milky ist ein privates Hobbyprojekt ohne kommerzielle Absicht — keine Werbung,
+          keine Spenden, keine Datenverarbeitung auf Servern, kein Gewerbe.
+          „Fianuk Studio" ist ein privater Projektname, kein Unternehmen.
+        </p>
+        <p className="about-legal-text">
+          Die Nutzung erfolgt auf eigenes Risiko. Es wird keine Gewährleistung dafür
+          übernommen, dass die App fehlerfrei oder dauerhaft verfügbar ist, und keine
+          Haftung für etwaigen Verlust lokal gespeicherter Daten — bitte regelmäßig
+          ein Backup exportieren.
+        </p>
+        <p className="about-legal-contact">
+          <strong>Verantwortlich (privat):</strong> Maximilian Otto Paul
+          <br />
+          <strong>Kontakt:</strong>{" "}
+          <a href="mailto:maximilian.otto.paul@web.de">maximilian.otto.paul@web.de</a>
+        </p>
+        <p className="about-legal-license">
+          Quellcode unter MIT-Lizenz auf{" "}
+          <a href="https://github.com/PaulchenPanther1951/Milky" target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+          .
+        </p>
+      </section>
+
       <section className="about-brand">
         <img
           src="./branding/fianuk-logo.png"

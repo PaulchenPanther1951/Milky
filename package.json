@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Milky — eine kleine Galaxie fuer jeden ausgefallenen Milchzahn. by Fianuk Studio.",
+  "license": "MIT",
+  "author": "Maximilian Otto Paul",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
