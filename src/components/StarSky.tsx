@@ -6,13 +6,14 @@ import { Constellation } from "./Constellation";
 interface StarSkyProps {
   litToothIds: Set<string>;
   entries?: ToothEntry[];
+  burstingToothId?: string | null;
   onSelect: (id: string) => void;
 }
 
 /**
  * Container fuer alle 20 Sterne. Positioniert prozentual relativ zur eigenen Box.
  */
-export function StarSky({ litToothIds, entries, onSelect }: StarSkyProps) {
+export function StarSky({ litToothIds, entries, burstingToothId, onSelect }: StarSkyProps) {
   return (
     <div className="star-sky" role="group" aria-label="Sternenkarte der Milchzaehne">
       <div className="jaw-divider" aria-hidden="true">
@@ -25,6 +26,7 @@ export function StarSky({ litToothIds, entries, onSelect }: StarSkyProps) {
           key={tooth.id}
           tooth={tooth}
           lit={litToothIds.has(tooth.id)}
+          bursting={burstingToothId === tooth.id}
           onSelect={onSelect}
         />
       ))}

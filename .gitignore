@@ -13,3 +13,6 @@ dist-ssr
 *.sw?
 .env
 .env.local
+
+# Claude Code lokales Setup
+.claude/

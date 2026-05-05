@@ -3,6 +3,7 @@ import type { ToothPosition } from "../types";
 interface StarProps {
   tooth: ToothPosition;
   lit: boolean;
+  bursting?: boolean;
   onSelect: (id: string) => void;
 }
 
@@ -10,8 +11,9 @@ interface StarProps {
  * Ein einzelner Stern in der Konstellation.
  * "lit" = der Zahn ist dokumentiert und der Stern leuchtet.
  * "dim" = der Zahn ist noch da, der Stern wartet.
+ * "bursting" = wurde gerade neu dokumentiert, spielt eine einmalige Strahlen-Animation.
  */
-export function Star({ tooth, lit, onSelect }: StarProps) {
+export function Star({ tooth, lit, bursting, onSelect }: StarProps) {
   const sizeByType: Record<string, number> = {
     "incisor-central": 14,
     "incisor-lateral": 13,
@@ -24,7 +26,7 @@ export function Star({ tooth, lit, onSelect }: StarProps) {
   return (
     <button
       type="button"
-      className={`star ${lit ? "lit" : "dim"}`}
+      className={`star ${lit ? "lit" : "dim"}${bursting ? " bursting" : ""}`}
       style={{
         left: `${tooth.x}%`,
         top: `${tooth.y}%`,
@@ -37,6 +39,7 @@ export function Star({ tooth, lit, onSelect }: StarProps) {
     >
       <span className="star-glow" aria-hidden="true" />
       <span className="star-core" aria-hidden="true" />
+      {bursting && <span className="star-burst" aria-hidden="true" />}
     </button>
   );
 }

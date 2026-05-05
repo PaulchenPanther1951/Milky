@@ -99,4 +99,5 @@ export function applyTheme(key: ThemeKey): void {
   for (const [varName, value] of Object.entries(theme.vars)) {
     root.style.setProperty(varName, value);
   }
+  root.setAttribute("data-theme", key);
 }

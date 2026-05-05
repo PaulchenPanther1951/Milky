@@ -13,7 +13,7 @@ interface Props {
   profile: Profile;
   existingEntry: ToothEntry | null;
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (toothId: string, isNew: boolean) => void;
 }
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
@@ -122,7 +122,7 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
       };
       await putEntry(entry);
       if (!isExisting) playStarLight(soundsEnabled);
-      onSaved();
+      onSaved(tooth!.id, !isExisting);
       onClose();
     } finally {
       setSubmitting(false);
@@ -135,7 +135,7 @@ export function StarDetail({ toothId, profile, existingEntry, onClose, onSaved }
     setSubmitting(true);
     try {
       await deleteEntry(existingEntry.id);
-      onSaved();
+      onSaved(existingEntry.toothId, false);
       onClose();
     } finally {
       setSubmitting(false);

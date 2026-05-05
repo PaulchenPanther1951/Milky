@@ -11,6 +11,16 @@ export function Onboarding() {
     <div className="onboarding">
       {step === "welcome" && (
         <div className="onboarding-screen welcome-screen">
+          <div className="fianuk-presents">
+            <img
+              src="/branding/fianuk-logo.png"
+              alt="Fianuk Studio"
+              className="fianuk-logo"
+              width={140}
+              height={56}
+            />
+            <span className="fianuk-presents-text">proudly presents</span>
+          </div>
           <p className="onboarding-kicker">Willkommen</p>
           <h1>Eine kleine Galaxie für jeden ausgefallenen Milchzahn.</h1>
           <p className="onboarding-lede">
@@ -20,6 +30,10 @@ export function Onboarding() {
           <button type="button" className="btn btn-primary btn-large" onClick={() => setStep("profile")}>
             Los geht's
           </button>
+          <p className="privacy-pill">
+            <span className="privacy-dot" aria-hidden="true">·</span>
+            Alles bleibt auf deinem Gerät · kein Account · kein Tracking
+          </p>
           <p className="install-hint">
             Tipp: {isIOS ? "Tippe unten auf Teilen → \"Zum Home-Bildschirm\"" : "Tippe ins Browser-Menü → \"Zum Startbildschirm hinzufügen\""},
             dann hast du Milky immer griffbereit.

@@ -17,8 +17,10 @@ type Mode =
   | { kind: "list" }
   | { kind: "add" }
   | { kind: "edit"; profileId: string }
+  | { kind: "delete"; profileId: string }
   | { kind: "settings" }
-  | { kind: "milestones" };
+  | { kind: "milestones" }
+  | { kind: "about" };
 
 export function ProfileSwitcher({ onClose }: Props) {
   const { profiles, activeProfile, setActiveProfile, saveProfile, deleteProfile } =
@@ -44,7 +46,7 @@ export function ProfileSwitcher({ onClose }: Props) {
   // When opening Edit, pre-apply that profile's theme so the form preview matches
   // and restore active profile's theme on close
   useEffect(() => {
-    if (mode.kind === "edit") {
+    if (mode.kind === "edit" || mode.kind === "delete") {
       const target = profiles.find((p) => p.id === mode.profileId);
       if (target) applyTheme(target.theme);
     } else if (mode.kind === "add") {
@@ -125,6 +127,13 @@ export function ProfileSwitcher({ onClose }: Props) {
             >
               Einstellungen
             </button>
+            <button
+              type="button"
+              className="btn btn-ghost btn-block settings-link"
+              onClick={() => setMode({ kind: "about" })}
+            >
+              Über Milky
+            </button>
           </>
         )}
 
@@ -195,27 +204,37 @@ export function ProfileSwitcher({ onClose }: Props) {
                 onCancel={() => setMode({ kind: "list" })}
                 submitLabel="Festhalten"
               />
-              {profiles.length > 1 && (
-                <button
-                  type="button"
-                  className="btn btn-danger-ghost btn-block"
-                  onClick={async () => {
-                    if (confirm(`${target.name} und ihre/seine Galaxie wirklich loeschen?`)) {
-                      await deleteProfile(target.id);
-                      setMode({ kind: "list" });
-                    }
-                  }}
-                >
-                  Profil loeschen
-                </button>
-              )}
+              <button
+                type="button"
+                className="btn btn-danger-ghost btn-block"
+                onClick={() => setMode({ kind: "delete", profileId: target.id })}
+              >
+                {target.name} aus Milky entfernen
+              </button>
             </>
+          );
+        })()}
+
+        {mode.kind === "delete" && (() => {
+          const target = profiles.find((p) => p.id === mode.profileId);
+          if (!target) return null;
+          return (
+            <DeletePane
+              profileName={target.name}
+              onCancel={() => setMode({ kind: "edit", profileId: target.id })}
+              onConfirm={async () => {
+                await deleteProfile(target.id);
+                setMode({ kind: "list" });
+              }}
+            />
           );
         })()}
 
         {mode.kind === "milestones" && activeProfile && (
           <MilestonesPane profileId={activeProfile.id} profileName={activeProfile.name} />
         )}
+
+        {mode.kind === "about" && <AboutPane />}
       </div>
     </div>
   );
@@ -249,6 +268,161 @@ function MilestonesPane({ profileId, profileName }: { profileId: string; profile
           );
         })}
       </ul>
+    </>
+  );
+}
+
+function AboutPane() {
+  return (
+    <>
+      <p className="modal-kicker">Über Milky</p>
+      <h2 className="modal-title">Was du wissen solltest</h2>
+
+      <section className="about-block">
+        <h3 className="about-block-title">
+          <span className="about-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <path d="M12 3l8 4v5c0 4.5-3.4 8.4-8 9-4.6-.6-8-4.5-8-9V7l8-4z" strokeLinejoin="round" />
+              <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          Deine Daten bleiben bei dir
+        </h3>
+        <ul className="about-list">
+          <li>
+            <strong>Alles lokal.</strong> Fotos, Notizen, Audio-Erinnerungen und Profile werden
+            ausschließlich im Speicher deines Browsers (IndexedDB) abgelegt — sie verlassen
+            niemals dein Gerät.
+          </li>
+          <li>
+            <strong>Kein Konto, kein Login.</strong> Milky funktioniert ohne Anmeldung,
+            ohne Cloud-Service und ohne Server im Hintergrund.
+          </li>
+          <li>
+            <strong>Kein Tracking, keine Analytics.</strong> Niemand weiß, wann du Milky
+            öffnest oder was du einträgst.
+          </li>
+          <li>
+            <strong>Du behältst die Kontrolle.</strong> Über
+            <em> Einstellungen → Backup &amp; Wiederherstellen</em> kannst du jederzeit
+            ein Backup als Datei exportieren oder einspielen.
+          </li>
+          <li className="about-list-warn">
+            <strong>Wichtig:</strong> Wenn du den Browser-Speicher leerst oder Milky
+            deinstallierst (z.B. Cache löschen), gehen die lokalen Daten verloren —
+            mach also regelmäßig ein Backup.
+          </li>
+        </ul>
+      </section>
+
+      <section className="about-block">
+        <h3 className="about-block-title">
+          <span className="about-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          Wie Milky gebaut ist
+        </h3>
+        <ul className="about-stack">
+          <li><span className="stack-tag">React</span> Bedien-Oberfläche</li>
+          <li><span className="stack-tag">TypeScript</span> typsicherer Code</li>
+          <li><span className="stack-tag">Vite</span> Build-Werkzeug</li>
+          <li><span className="stack-tag">IndexedDB</span> lokale Datenbank im Browser</li>
+          <li><span className="stack-tag">PWA · Workbox</span> offline-fähig &amp; installierbar</li>
+        </ul>
+        <p className="about-stack-note">
+          Open-Source-Stack, kein Backend, kein externer Dienst. Milky läuft komplett
+          in deinem Browser — auch ohne Internet, sobald die App einmal geladen wurde.
+        </p>
+      </section>
+
+      <section className="about-brand">
+        <img
+          src="/branding/fianuk-logo.png"
+          alt="Fianuk Studio"
+          className="about-fianuk-logo"
+          width={120}
+          height={48}
+        />
+        <p className="about-brand-text">
+          Made with care by <strong>Fianuk Studio</strong>
+        </p>
+      </section>
+    </>
+  );
+}
+
+function DeletePane({
+  profileName,
+  onCancel,
+  onConfirm,
+}: {
+  profileName: string;
+  onCancel: () => void;
+  onConfirm: () => Promise<void>;
+}) {
+  const [typed, setTyped] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const matches = typed.trim().toLowerCase() === profileName.trim().toLowerCase();
+
+  return (
+    <>
+      <p className="modal-kicker">Wirklich entfernen?</p>
+      <h2 className="modal-title">{profileName} aus Milky entfernen</h2>
+
+      <div className="danger-warning">
+        <p className="danger-warning-title">Das ist endgültig.</p>
+        <p className="danger-warning-text">
+          Wenn du fortfährst, gehen folgende Dinge unwiderruflich verloren:
+        </p>
+        <ul className="danger-warning-list">
+          <li>Alle dokumentierten Sterne (Milchzähne)</li>
+          <li>Alle Fotos (Wackelzahn &amp; Lücke)</li>
+          <li>Alle Notizen und Audio-Erinnerungen</li>
+          <li>Alle bisher gefeierten Meilensteine</li>
+        </ul>
+        <p className="danger-warning-hint">
+          Tipp: Über <em>Einstellungen &rarr; Backup &amp; Wiederherstellen</em> kannst du
+          vorher noch eine Sicherungskopie exportieren.
+        </p>
+      </div>
+
+      <div className="field">
+        <label htmlFor="delete-confirm-name">
+          Tippe zur Bestätigung den Namen <strong>{profileName}</strong> ein:
+        </label>
+        <input
+          id="delete-confirm-name"
+          type="text"
+          value={typed}
+          onChange={(e) => setTyped(e.target.value)}
+          autoComplete="off"
+          autoFocus
+          placeholder={profileName}
+        />
+      </div>
+
+      <div className="form-actions">
+        <button type="button" className="btn btn-ghost" onClick={onCancel} disabled={submitting}>
+          Abbrechen
+        </button>
+        <button
+          type="button"
+          className="btn btn-danger"
+          disabled={!matches || submitting}
+          onClick={async () => {
+            setSubmitting(true);
+            try {
+              await onConfirm();
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {submitting ? "Lösche..." : "Endgültig entfernen"}
+        </button>
+      </div>
     </>
   );
 }
