@@ -35,21 +35,24 @@ body{
   line-height:1.55;
 }
 
+/* Milky-Hintergrund: Milchstraßen-Schwung diagonal mit weichen Nebel-Wolken — kindlich, kein Radar-Ring */
 body::before{
-  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  content:'';position:fixed;top:-10%;left:-10%;right:-10%;bottom:-10%;
   background:
-    radial-gradient(circle at 18% 22%, transparent 16%, rgba(216,196,255,0.10) 16.3%, rgba(216,196,255,0.10) 16.6%, transparent 16.9%),
-    radial-gradient(circle at 18% 22%, transparent 26%, rgba(216,196,255,0.05) 26.3%, rgba(216,196,255,0.05) 26.6%, transparent 26.9%),
-    radial-gradient(circle at 82% 70%, transparent 18%, rgba(255,180,220,0.08) 18.3%, rgba(255,180,220,0.08) 18.6%, transparent 18.9%),
-    radial-gradient(circle at 82% 70%, transparent 30%, rgba(255,180,220,0.04) 30.3%, rgba(255,180,220,0.04) 30.6%, transparent 30.9%),
-    radial-gradient(circle at 50% 110%, transparent 30%, rgba(120,170,255,0.06) 30.4%, rgba(120,170,255,0.06) 30.7%, transparent 31%);
+    /* großer diagonaler Milchstraßen-Streifen */
+    linear-gradient(115deg, transparent 0%, transparent 28%, rgba(216,196,255,0.10) 38%, rgba(255,180,220,0.08) 50%, rgba(122,210,200,0.06) 62%, transparent 72%, transparent 100%),
+    /* sanfter zweiter Strom flacher gekippt */
+    linear-gradient(95deg, transparent 0%, transparent 35%, rgba(255,214,168,0.05) 50%, transparent 65%, transparent 100%),
+    /* zwei diffuse Nebel-Inseln statt Ringe */
+    radial-gradient(ellipse 600px 280px at 22% 30%, rgba(216,196,255,0.12) 0%, rgba(216,196,255,0.04) 45%, transparent 70%),
+    radial-gradient(ellipse 520px 260px at 78% 72%, rgba(255,180,220,0.10) 0%, rgba(255,180,220,0.03) 50%, transparent 75%);
   pointer-events:none;
   z-index:0;
-  animation:driftbg 22s ease-in-out infinite alternate;
+  animation:milkywaybg 28s ease-in-out infinite alternate;
 }
-@keyframes driftbg{
-  0%{transform:scale(1) translate(0,0);opacity:0.85}
-  100%{transform:scale(1.05) translate(20px,-15px);opacity:1}
+@keyframes milkywaybg{
+  0%{transform:translate(0,0) rotate(0deg);opacity:0.85}
+  100%{transform:translate(15px,-10px) rotate(0.4deg);opacity:1}
 }
 
 /* Sternenhimmel-Layer */
@@ -291,6 +294,26 @@ body::after{
 .ti.next .ml{background:rgba(240,192,132,0.2);color:var(--warning)}
 .ti.done::before{background:var(--success);box-shadow:0 0 10px rgba(158,216,166,0.45),0 0 0 3px var(--night)}
 .ti.done .ml{background:rgba(158,216,166,0.2);color:var(--success)}
+
+/* Aufklappbarer Buildplan pro Meilenstein */
+.ti details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.ti details summary{cursor:pointer;list-style:none;font-size:0.74rem;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;font-weight:600;padding:4px 0;user-select:none;display:flex;align-items:center;gap:8px;transition:color 0.2s}
+.ti details summary::-webkit-details-marker{display:none}
+.ti details summary::before{content:'›';display:inline-block;color:var(--milky);font-size:1.1rem;font-weight:700;transition:transform 0.25s;line-height:1}
+.ti details[open] summary::before{transform:rotate(90deg)}
+.ti details summary:hover{color:var(--milky)}
+.ti .build-list{list-style:none;margin:12px 0 4px;padding-left:14px;border-left:1px dashed var(--line-strong)}
+.ti .build-list li{padding:6px 0 6px 12px;font-size:0.85rem;color:var(--text);line-height:1.5;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline}
+.ti .build-list li .bm{font-family:'Quicksand', monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;flex-shrink:0;min-width:42px}
+.ti .build-list li.bdone .bm{color:var(--success)}
+.ti .build-list li.bnext .bm{color:var(--warning)}
+.ti .build-list li.bfuture .bm{color:var(--text-faint)}
+.ti .build-list li .bt{color:var(--text)}
+.ti .build-list li.bfuture .bt{color:var(--text-dim)}
+.ti .build-list li .bt em{color:var(--milky);font-style:normal;font-weight:600}
+.ti .build-list li .bc{font-family:monospace;font-size:0.68rem;color:var(--text-faint);background:rgba(12,10,31,0.55);padding:2px 7px;border-radius:5px;white-space:nowrap}
+.ti .build-note{font-size:0.76rem;color:var(--text-dim);font-style:italic;margin-top:12px;padding:8px 12px;background:rgba(240,192,132,0.06);border-left:2px solid rgba(240,192,132,0.3);border-radius:0 6px 6px 0}
+.ti .build-note strong{color:var(--warning);font-style:normal;font-weight:600}
 
 .rg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .rc{
@@ -559,41 +582,119 @@ body::after{
       <div class="ti done">
         <div class="mn">Schritt 1 — Projekt-Setup <span class="ml">abgeschlossen</span></div>
         <div class="md">Projektordner <code>milky/</code> auf dem Desktop, analog zu Echo strukturiert (<code>src/</code>, <code>public/</code>, <code>docs/</code>, <code>_backup/</code>, <code>assets/</code>). Vite + React + TypeScript + idb + vite-plugin-pwa als Stack. Hello-World-Welcome-Screen mit Twilight-Galaxie-Hintergrund (Nebel-Drift, Stern-Twinkle). Diese Übersichts-HTML <code>docs/01-uebersicht.html</code> analog Echo, eigene Milky-Palette. Abgeschlossen 2026-05-03.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S1.1</span><span class="bt">Projektordner-Struktur (<code>src/</code>, <code>public/</code>, <code>docs/</code>, <code>_backup/</code>, <code>assets/</code>) analog Echo</span><span class="bc">ddc4cd9</span></li>
+            <li class="bdone"><span class="bm">✓ S1.2</span><span class="bt"><em>Vite + React + TypeScript + idb + vite-plugin-pwa</em> als Stack</span><span class="bc">ddc4cd9</span></li>
+            <li class="bdone"><span class="bm">✓ S1.3</span><span class="bt">Welcome-Screen mit Twilight-Galaxie-Hintergrund (Nebel-Drift, Stern-Twinkle)</span><span class="bc">ddc4cd9</span></li>
+            <li class="bdone"><span class="bm">✓ S1.4</span><span class="bt">Übersichts-HTML <code>docs/01-uebersicht.html</code> mit eigener Milky-Palette</span><span class="bc">ddc4cd9</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 2 — Sternenhimmel-Grundansicht <span class="ml">abgeschlossen</span></div>
         <div class="md">20 Sterne anatomisch auf einer ruhigen Smile-Arc, Größe variiert leicht nach Zahntyp (Backenzähne markant, Schneidezähne zart). Subtiles Pulsieren im Dim-State. Tap öffnet zunächst Platzhalter-Modal (in Schritt 4 zur echten Detail-Karte ausgebaut).</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S2.1</span><span class="bt">20 Sterne auf Smile-Arc anatomisch positioniert</span><span class="bc">bce0339</span></li>
+            <li class="bdone"><span class="bm">✓ S2.2</span><span class="bt">Größen-Variation nach Zahntyp (Backen markant, Schneider zart)</span><span class="bc">bce0339</span></li>
+            <li class="bdone"><span class="bm">✓ S2.3</span><span class="bt">Subtiles Pulsieren im Dim-State, Tap öffnet Platzhalter-Modal</span><span class="bc">bce0339</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 3 — Profil &amp; Multi-Kind <span class="ml">abgeschlossen</span></div>
         <div class="md">IndexedDB via idb mit Stores für profiles, entries, photos, audio, meta — Cascade-Delete inklusive. Onboarding: Welcome + ProfileEditor (Name, Foto via Canvas auf max. 800px komprimiert, Geburtsdatum, Theme-Auswahl mit Live-Preview). Header zeigt aktiven Avatar; Tap öffnet Switcher mit "+ Neues Kind" und Edit-/Delete-Flows.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S3.1</span><span class="bt">IndexedDB via idb mit fünf Stores (profiles, entries, photos, audio, meta) + Cascade-Delete</span><span class="bc">c5ebff4</span></li>
+            <li class="bdone"><span class="bm">✓ S3.2</span><span class="bt">Onboarding-Flow: Welcome + ProfileEditor mit Foto-Kompression auf 800 px (Canvas)</span><span class="bc">c5ebff4</span></li>
+            <li class="bdone"><span class="bm">✓ S3.3</span><span class="bt">Multi-Kind-Switcher im Header, Edit/Delete-Flows</span><span class="bc">c5ebff4</span></li>
+            <li class="bdone"><span class="bm">✓ S3.4</span><span class="bt">Theme-Auswahl mit Live-Preview im ProfileEditor</span><span class="bc">c5ebff4</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 4 — Zahn-Eintrag <span class="ml">abgeschlossen</span></div>
         <div class="md">Echte Detail-Karte: Datum (default heute), zwei Foto-Slots (vorher/nachher) mit Kompression auf 1600px, freier Diary-Text. Bei gesetztem Geburtsdatum wird das Alter zum Ereignis automatisch dazugeschrieben. Speichern lässt den Stern aufleuchten; SVG-Konstellations-Linien zeichnen sich chronologisch nach. Edit + Delete inklusive Cascade-Cleanup der Medien.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S4.1</span><span class="bt">Detail-Karte mit Datum (default heute) + Diary-Freitext</span><span class="bc">a8af8ab</span></li>
+            <li class="bdone"><span class="bm">✓ S4.2</span><span class="bt">Zwei Foto-Slots (vorher/nachher) mit 1600 px-Kompression</span><span class="bc">a8af8ab</span></li>
+            <li class="bdone"><span class="bm">✓ S4.3</span><span class="bt">Auto-Alter-Berechnung bei vorhandenem Geburtsdatum</span><span class="bc">a8af8ab</span></li>
+            <li class="bdone"><span class="bm">✓ S4.4</span><span class="bt">Stern-Aufleuchten beim Speichern + SVG-Konstellations-Linien chronologisch</span><span class="bc">a8af8ab</span></li>
+            <li class="bdone"><span class="bm">✓ S4.5</span><span class="bt">Edit/Delete mit Cascade-Cleanup der Medien</span><span class="bc">a8af8ab</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 5 — Diary-Erweiterungen <span class="ml">abgeschlossen</span></div>
         <div class="md">MediaRecorder-basiertes Audio-Memo bis 30 Sek. mit Codec-Detection (webm/opus, mp4, aac, ogg) und Fallback. Live-Pulse während der Aufnahme, nativer Audio-Player beim Wiedergeben, Re-Take + Entfernen. Optionales "Zahnfee/Maus gebracht"-Feld, eltern-getriggert via Klapp-Knopf.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S5.1</span><span class="bt">MediaRecorder-Audio-Memo (max. 30 s) mit Codec-Detection + Fallback</span><span class="bc">9835993</span></li>
+            <li class="bdone"><span class="bm">✓ S5.2</span><span class="bt">Live-Pulse während Aufnahme, nativer Audio-Player beim Abspielen</span><span class="bc">9835993</span></li>
+            <li class="bdone"><span class="bm">✓ S5.3</span><span class="bt">Re-Take + Entfernen-Funktion</span><span class="bc">9835993</span></li>
+            <li class="bdone"><span class="bm">✓ S5.4</span><span class="bt">Zahnfee/Maus-Feld als optionaler Klapp-Knopf, eltern-getriggert</span><span class="bc">9835993</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 6 — Themes &amp; Sound-Toggle <span class="ml">abgeschlossen</span></div>
         <div class="md">Vier Themes (Galaxie, Korallenriff, Drachenwald, Wolkenreich) als CSS-Variablen-Patches auf root. Settings-Pane mit Sound-Toggle (defaulted off, "lokal &amp; still"). WebAudio-Chimes statt Asset-Files: Zwei-Noten-Glöckchen beim ersten Aufleuchten, Major-Arpeggio + Sparkle für Meilensteine.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S6.1</span><span class="bt">Vier Themes (Galaxie, Korallenriff, Drachenwald, Wolkenreich) als CSS-Variablen-Patches</span><span class="bc">439d8b5</span></li>
+            <li class="bdone"><span class="bm">✓ S6.2</span><span class="bt">Settings-Pane mit Sound-Toggle (defaulted off, „lokal &amp; still")</span><span class="bc">439d8b5</span></li>
+            <li class="bdone"><span class="bm">✓ S6.3</span><span class="bt">WebAudio-Chimes (Zwei-Noten-Glöckchen + Major-Arpeggio mit Sparkle) statt Asset-Files</span><span class="bc">439d8b5</span></li>
+          </ul>
+          <div class="build-note"><strong>Bewusst weggelassen:</strong> Audio-Asset-Files. WebAudio bleibt Code-only und hält Bundle klein.</div>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 7 — Meilensteine <span class="ml">abgeschlossen</span></div>
         <div class="md">Sechs Stufen: erster Stern, erster oberer Stern, fünf, halbzeit (10), drei viertel (15), Galaxie komplett (20). Berechnung als reine Funktion über entries. celebratedMilestones pro Profil verhindert Wiederholung beim App-Restart; Erstkontakt setzt silent eine Baseline. Sternschnuppen-Sweep + Modal-Karte beim Freischalten, plus durchblätterbare Liste im Settings-Pane.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S7.1</span><span class="bt">Sechs Meilenstein-Stufen (1, 1 oben, 5, 10, 15, 20) als reine Funktion über entries</span><span class="bc">ce6018d</span></li>
+            <li class="bdone"><span class="bm">✓ S7.2</span><span class="bt"><em>celebratedMilestones</em>-Set pro Profil; Erstkontakt setzt silent eine Baseline</span><span class="bc">ce6018d</span></li>
+            <li class="bdone"><span class="bm">✓ S7.3</span><span class="bt">Sternschnuppen-Sweep + Modal-Karte beim Freischalten</span><span class="bc">ce6018d</span></li>
+            <li class="bdone"><span class="bm">✓ S7.4</span><span class="bt">Durchblätterbare Liste im Settings-Pane</span><span class="bc">ce6018d</span></li>
+          </ul>
+        </details>
       </div>
 
       <div class="ti done">
         <div class="mn">Schritt 8 — Export/Import + PWA-Polish + Deploy <span class="ml">abgeschlossen</span></div>
         <div class="md">Export erzeugt eine milky-backup-YYYY-MM-DD.json mit allen Profilen, Sternen, Fotos (Base64) und Audio. Re-Import überschreibt nach Confirm den lokalen Stand. App-Icons (192/512/180/maskable-512) aus Master-SVG via sharp generiert; Manifest mit korrektem purpose, apple-touch-icon-Link in index.html. GitHub-Actions-Workflow steht bereit (build + deploy-pages); aktiviert sich, sobald das Repo auf public geschaltet und Pages-Source auf "GitHub Actions" gestellt wird.</div>
+        <details>
+          <summary>Buildplan</summary>
+          <ul class="build-list">
+            <li class="bdone"><span class="bm">✓ S8.1</span><span class="bt">Export als <code>milky-backup-YYYY-MM-DD.json</code> mit Profilen, Sternen, Fotos (Base64), Audio</span><span class="bc">333be09</span></li>
+            <li class="bdone"><span class="bm">✓ S8.2</span><span class="bt">Re-Import mit Confirm-Dialog überschreibt lokalen Stand</span><span class="bc">333be09</span></li>
+            <li class="bdone"><span class="bm">✓ S8.3</span><span class="bt">App-Icons (192/512/180/maskable-512) aus Master-SVG via <em>sharp</em> generiert</span><span class="bc">333be09</span></li>
+            <li class="bdone"><span class="bm">✓ S8.4</span><span class="bt">PWA-Manifest mit korrektem purpose + apple-touch-icon-Link</span><span class="bc">333be09</span></li>
+            <li class="bdone"><span class="bm">✓ S8.5</span><span class="bt">GitHub-Actions-Workflow (build + deploy-pages) bereitgestellt</span><span class="bc">333be09</span></li>
+            <li class="bdone"><span class="bm">✓ S8.6</span><span class="bt">Live-Link aktiv, Pages-Source auf „GitHub Actions" geschaltet</span><span class="bc">74b7ad8</span></li>
+            <li class="bdone"><span class="bm">✓ Polish</span><span class="bt">UX-Polish: Lösch-Sicherheit, Stern-Burst, Theme-Szenen, Fianuk-Branding</span><span class="bc">c347b39</span></li>
+            <li class="bdone"><span class="bm">✓ Mobile</span><span class="bt">Mobile-Fixes: Logo-Pfad, scrollbare Modale, Onboarding-Flow</span><span class="bc">8faf783</span></li>
+            <li class="bdone"><span class="bm">✓ Lizenz</span><span class="bt">Hobby-Disclaimer + MIT-Lizenz für rechtliche Klarheit</span><span class="bc">ed72b9e</span></li>
+            <li class="bdone"><span class="bm">✓ Storage</span><span class="bt">Persistent Storage: Daten dauerhaft auf dem Gerät sichern (kein Browser-Auto-Cleanup)</span><span class="bc">d771014</span></li>
+          </ul>
+        </details>
       </div>
 
     </div>
