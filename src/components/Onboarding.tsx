@@ -22,8 +22,11 @@ export function Onboarding() {
             />
             <span className="fianuk-presents-text">proudly presents</span>
           </div>
+          <h1 className="milky-wordmark" aria-label="Milky">
+            <span aria-hidden="true">Milky</span>
+          </h1>
           <p className="onboarding-kicker">Willkommen</p>
-          <h1>Eine kleine Galaxie für jeden ausgefallenen Milchzahn.</h1>
+          <h2 className="welcome-tagline">Eine kleine Galaxie für jeden ausgefallenen Milchzahn.</h2>
           <p className="onboarding-lede">
             Milky ist ein Tagebuch für die Wackelzahn-Zeit. Mit jedem Zahn, den ihr festhaltet,
             leuchtet ein Stern mehr — bis am Ende eine ganze kleine Konstellation entstanden ist.

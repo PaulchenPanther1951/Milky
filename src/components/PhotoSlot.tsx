@@ -19,8 +19,10 @@ interface Props {
 }
 
 export function PhotoSlot({ label, hint, state, onChange }: Props) {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
   const [pendingUrl, setPendingUrl] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Object URL lifecycle for the pending blob
   useEffect(() => {
@@ -32,6 +34,16 @@ export function PhotoSlot({ label, hint, state, onChange }: Props) {
     setPendingUrl(url);
     return () => URL.revokeObjectURL(url);
   }, [state.pendingBlob]);
+
+  // Close on ESC
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   // Existing photo (if any) only shown when no pending blob and not removed
   const showExisting = !state.pendingBlob && !state.removed && Boolean(state.existingKey);
@@ -56,13 +68,25 @@ export function PhotoSlot({ label, hint, state, onChange }: Props) {
     onChange({ ...state, pendingBlob: null, removed: true });
   }
 
+  function chooseCamera() {
+    setMenuOpen(false);
+    cameraRef.current?.click();
+  }
+
+  function chooseGallery() {
+    setMenuOpen(false);
+    galleryRef.current?.click();
+  }
+
   return (
     <div className="photo-slot">
       <button
         type="button"
         className={`photo-slot-area ${previewUrl ? "has-image" : "empty"}`}
-        onClick={() => fileRef.current?.click()}
+        onClick={() => setMenuOpen(true)}
         aria-label={`${label} ${previewUrl ? "ändern" : "hinzufügen"}`}
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
       >
         {previewUrl ? (
           <img src={previewUrl} alt="" />
@@ -88,11 +112,52 @@ export function PhotoSlot({ label, hint, state, onChange }: Props) {
           ×
         </button>
       )}
+
+      {menuOpen && (
+        <div
+          className="photo-source-veil"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foto-Quelle wählen"
+          onClick={() => setMenuOpen(false)}
+        >
+          <div className="photo-source-sheet" onClick={(e) => e.stopPropagation()}>
+            <p className="photo-source-title">{previewUrl ? "Foto ändern" : "Foto hinzufügen"}</p>
+            <button type="button" className="photo-source-btn" onClick={chooseCamera}>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="6" width="18" height="14" rx="2" />
+                <circle cx="12" cy="13" r="3.2" />
+                <path d="M8 6l1.5-2h5L16 6" />
+              </svg>
+              <span>Foto aufnehmen</span>
+            </button>
+            <button type="button" className="photo-source-btn" onClick={chooseGallery}>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="9" cy="10" r="1.6" />
+                <path d="M21 17l-5-5-5 5-3-3-5 5" />
+              </svg>
+              <span>Aus Galerie wählen</span>
+            </button>
+            <button type="button" className="photo-source-cancel" onClick={() => setMenuOpen(false)}>
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
+
       <input
-        ref={fileRef}
+        ref={cameraRef}
         type="file"
         accept="image/*"
         capture="environment"
+        onChange={onPick}
+        hidden
+      />
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/*"
         onChange={onPick}
         hidden
       />
