@@ -22,8 +22,10 @@ export function ProfileEditor({ initial, onSubmit, onCancel, submitLabel = "Fest
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [sourceMenuOpen, setSourceMenuOpen] = useState(false);
   const existingPhotoKey = initial?.photoKey;
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   // Live theme preview as user picks
   useEffect(() => {
@@ -36,6 +38,16 @@ export function ProfileEditor({ initial, onSubmit, onCancel, submitLabel = "Fest
       if (photoPreview) URL.revokeObjectURL(photoPreview);
     };
   }, [photoPreview]);
+
+  // Close source menu on ESC
+  useEffect(() => {
+    if (!sourceMenuOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setSourceMenuOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sourceMenuOpen]);
 
   async function onPickFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -87,8 +99,10 @@ export function ProfileEditor({ initial, onSubmit, onCancel, submitLabel = "Fest
         <button
           type="button"
           className="photo-picker"
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => setSourceMenuOpen(true)}
           aria-label="Foto auswaehlen"
+          aria-haspopup="menu"
+          aria-expanded={sourceMenuOpen}
         >
           {previewUrl ? (
             <img src={previewUrl} alt="" />
@@ -105,15 +119,63 @@ export function ProfileEditor({ initial, onSubmit, onCancel, submitLabel = "Fest
           )}
         </button>
         <input
-          ref={fileInputRef}
+          ref={cameraInputRef}
           type="file"
           accept="image/*"
           capture="environment"
           onChange={onPickFile}
           hidden
         />
+        <input
+          ref={galleryInputRef}
+          type="file"
+          accept="image/*"
+          onChange={onPickFile}
+          hidden
+        />
         <p className="field-hint">Tippe das Bild an, um ein Foto auszuwaehlen.</p>
       </div>
+
+      {sourceMenuOpen && (
+        <div
+          className="photo-source-veil"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foto-Quelle wählen"
+          onClick={() => setSourceMenuOpen(false)}
+        >
+          <div className="photo-source-sheet" onClick={(e) => e.stopPropagation()}>
+            <p className="photo-source-title">{previewUrl || initial?.photoKey ? "Foto ändern" : "Foto hinzufügen"}</p>
+            <button
+              type="button"
+              className="photo-source-btn"
+              onClick={() => { setSourceMenuOpen(false); cameraInputRef.current?.click(); }}
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="6" width="18" height="14" rx="2" />
+                <circle cx="12" cy="13" r="3.2" />
+                <path d="M8 6l1.5-2h5L16 6" />
+              </svg>
+              <span>Foto aufnehmen</span>
+            </button>
+            <button
+              type="button"
+              className="photo-source-btn"
+              onClick={() => { setSourceMenuOpen(false); galleryInputRef.current?.click(); }}
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="9" cy="10" r="1.6" />
+                <path d="M21 17l-5-5-5 5-3-3-5 5" />
+              </svg>
+              <span>Aus Galerie wählen</span>
+            </button>
+            <button type="button" className="photo-source-cancel" onClick={() => setSourceMenuOpen(false)}>
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="field">
         <label htmlFor="profile-name">Wie heisst das Kind?</label>
