@@ -16,3 +16,6 @@ dist-ssr
 
 # Claude Code lokales Setup
 .claude/
+
+# Backup-Ordner (lokal, nicht versioniert)
+_backup/
